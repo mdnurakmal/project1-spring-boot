@@ -5,4 +5,4 @@ steps:
     secretEnv: [ '$$DOCKERUSERNAME', '$$DOCKERPASSWORD' ]
 
 options:
-  logStreamingOption: STREAM_ON
+  logging: CLOUD_LOGGING_ONLY

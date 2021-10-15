@@ -3,12 +3,5 @@ steps:
     entrypoint: mvn
     args: [ 'compile' ,'com.google.cloud.tools:jib-maven-plugin:2.3.0:dockerBuild']
 
-availableSecrets:
-  secretManager:
-    - versionName: projects/test-327905/secrets/DOCKERUSERNAME/versions/1
-      env: 'DOCKERUSERNAME'
-    - versionName: projects/test-327905/secrets/DOCKERPASSWORD/versions/1
-      env: 'DOCKERPASSWORD'
-
 options:
   logging: CLOUD_LOGGING_ONLY

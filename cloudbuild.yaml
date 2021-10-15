@@ -3,13 +3,13 @@ steps:
     entrypoint: mvn
     args: [ 'spring-boot:build-image']
 
-  - name: 'gcr.io/cloud-builders/docker'
+  - name: "gcr.io/cloud-builders/docker"
     entrypoint: 'bash'
-      args:
-        - '-c'
-        - |
-          docker tag docker.io/library/chat:0.0.1-SNAPSHOT mdnurakmal/springboot-demo-1:latest
-          docker push mdnurakmal/springboot-demo-1:latest
+    args:
+      - '-c'
+      - |
+        docker tag docker.io/library/chat:0.0.1-SNAPSHOT mdnurakmal/springboot-demo-1:latest
+        docker push mdnurakmal/springboot-demo-1:latest
 
 
 options:

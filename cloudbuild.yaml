@@ -1,9 +1,9 @@
 steps:
-  - name: maven:3-jdk-8
+  - name: maven:3-jdk-11
     entrypoint: mvn
     args: [ 'clean' ,'install']
 
-  - name: maven:3-jdk-8
+  - name: maven:3-jdk-11
     entrypoint: mvn
     args: ['clean' ,'deploy' ,'-Ddocker.user=$$DOCKERUSERNAME' ,'-Ddocker.password=$$DOCKERPASSWORD' ,'-Ddocker.url=mdnurakmal/springboot-demo-1']
     secretEnv: [ 'DOCKERUSERNAME', 'DOCKERPASSWORD' ]

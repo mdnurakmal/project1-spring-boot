@@ -4,5 +4,12 @@ steps:
     args: ['mvn' ,'clean' ,'deploy' ,'-Ddocker.user=$$DOCKERUSERNAME' ,'-Ddocker.password=$$DOCKERPASSWORD' ,'-Ddocker.url=mdnurakmal/springboot-demo-1']
     secretEnv: [ '$$DOCKERUSERNAME', '$$DOCKERPASSWORD' ]
 
+availableSecrets:
+  secretManager:
+    - versionName: projects/	test-327905/secrets/DOCKERUSERNAME/versions/1
+      env: 'DOCKERPASSWORD'
+    - versionName: projects/	test-327905/secrets/DOCKERPASSWORD/versions/1
+      env: 'DOCKERUSERNAME'
+
 options:
   logging: CLOUD_LOGGING_ONLY

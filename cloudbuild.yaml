@@ -1,7 +1,7 @@
 steps:
   - name: maven:3-jdk-11
     entrypoint: mvn
-    args: [ 'compile' ,'com.google.cloud.tools:jib-maven-plugin:2.3.0:dockerBuild']
+    args: [ 'spring-boot:build-image']
 
 options:
   logging: CLOUD_LOGGING_ONLY

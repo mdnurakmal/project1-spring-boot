@@ -8,7 +8,7 @@ steps:
     args:
       - '-c'
       - |
-        docker login -u="${$$DOCKERUSERNAME}" -p="${$$DOCKERPASSWORD}"
+        docker login -u=$$DOCKERUSERNAME -p=$$DOCKERPASSWORD
         docker tag docker.io/library/chat:0.0.1-SNAPSHOT mdnurakmal/springboot-demo-1:latest
         docker push mdnurakmal/springboot-demo-1:latest
     secretEnv: [ 'DOCKERUSERNAME', 'DOCKERPASSWORD' ]

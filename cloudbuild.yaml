@@ -5,7 +5,7 @@ steps:
 
   - name: maven:3-jdk-11
     entrypoint: mvn
-    args: ['clean' ,'deploy' ,'-Ddocker.user=$$DOCKERUSERNAME' ,'-Ddocker.password=$$DOCKERPASSWORD' ,'-Ddocker.url=mdnurakmal/springboot-demo-1']
+    args: ['clean' ,'deploy' ,'-Ddocker.user=$$DOCKERUSERNAME' ,'-Ddocker.password=$$DOCKERPASSWORD' ,'-Ddocker.url=https://hub.docker.com/repository/docker/mdnurakmal/springboot-demo-1']
     secretEnv: [ 'DOCKERUSERNAME', 'DOCKERPASSWORD' ]
 
 availableSecrets:

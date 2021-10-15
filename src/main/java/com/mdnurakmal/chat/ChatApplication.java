@@ -1,4 +1,4 @@
-package com.mdnurakmal.studentattendance;
+package com.mdnurakmal.chat;
 
 
 import org.springframework.boot.SpringApplication;
@@ -11,10 +11,10 @@ import org.springframework.web.filter.CorsFilter;
 import java.util.Arrays;
 
 @SpringBootApplication
-public class StudentattendanceApplication {
+public class ChatApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(StudentattendanceApplication.class, args);
+		SpringApplication.run(ChatApplication.class, args);
 	}
 
 	@Bean

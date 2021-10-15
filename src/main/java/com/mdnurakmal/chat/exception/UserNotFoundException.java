@@ -1,4 +1,4 @@
-package com.mdnurakmal.studentattendance.exception;
+package com.mdnurakmal.chat.exception;
 
 public class UserNotFoundException extends RuntimeException{
     public UserNotFoundException(String message) {

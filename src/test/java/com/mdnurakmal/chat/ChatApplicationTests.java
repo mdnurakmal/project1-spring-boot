@@ -1,10 +1,10 @@
-package com.mdnurakmal.studentattendance;
+package com.mdnurakmal.chat;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class StudentattendanceApplicationTests {
+class ChatApplicationTests {
 
 	@Test
 	void contextLoads() {

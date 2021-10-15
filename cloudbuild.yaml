@@ -4,3 +4,5 @@ steps:
     args: ['mvn' ,'clean' ,'deploy' ,'-Ddocker.user=$$DOCKERUSERNAME' ,'-Ddocker.password=$$DOCKERPASSWORD' ,'-Ddocker.url=mdnurakmal/springboot-demo-1']
     secretEnv: [ '$$DOCKERUSERNAME', '$$DOCKERPASSWORD' ]
 
+options:
+  logStreamingOption: STREAM_ON

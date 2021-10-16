@@ -20,9 +20,6 @@ import java.util.Map;
 @Configuration
 public class ProducerConfiguration {
 
-    @Value("${userBucket.path}")
-    private String userBucketPath;
-
     @Autowired
     private ProducerFactory<Integer, String> producerFactory;
 

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sed -ri 's/^(\s*)(image\s*:\s*nginx\s*$)/\1image: $1/' $2
+sed -e '<clusterip>' -e $1 $2

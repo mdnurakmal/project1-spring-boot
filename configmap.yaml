@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: example-configmap
 data:
-  application.properties: |
-    spring.kafka.consumer.bootstrap-servers = clusterip:9092
-    spring.kafka.producer.bootstrap-servers = clusterip:9092
-
+  dev-config.json:
+    '{
+      "clusterUrl": "clusterip"
+     }'

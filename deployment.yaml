@@ -22,7 +22,7 @@ spec:
           name: springboot-demo-1
           envFrom:
             - configMapRef:
-                name: example-config
+                name: example-configmap
           resources: {}
 
 status: {}

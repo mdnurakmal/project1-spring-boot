@@ -3,6 +3,7 @@ package com.mdnurakmal.chat.configuration;
 import com.mdnurakmal.chat.model.Message;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,22 +22,20 @@ public class ProducerConfiguration {
 
     @Value("${userBucket.path}")
     private String userBucketPath;
-    @Bean
-    public ProducerFactory<String, Message> producerFactory() {
-        return new DefaultKafkaProducerFactory<>(producerConfigurations());
-    }
+
+    @Autowired
+    private ProducerFactory<Integer, String> producerFactory;
 
     @Bean
-    public Map<String, Object> producerConfigurations() {
-        Map<String, Object> configurations = new HashMap<>();
-        configurations.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, userBucketPath);
-        configurations.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        configurations.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        return configurations;
+    public Map<String, Object> producerConfig() {
+        Map<String, Object> producerConfig = new HashMap<>(producerFactory.getConfigurationProperties());
+        producerConfig.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        producerConfig.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return producerConfig;
     }
 
     @Bean
     public KafkaTemplate<String, Message> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
+        return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(producerConfig()));
     }
 }

@@ -2,6 +2,7 @@ package com.mdnurakmal.chat.model;
 
 public class Message {
     private String sender;
+    private String receiver;
     private String content;
     private String timestamp;
 
@@ -24,8 +25,9 @@ public class Message {
         this.sender = sender;
     }
 
-    public Message(String sender, String content) {
+    public Message(String sender,String receiver, String content) {
         this.sender = sender;
+        this.receiver = receiver;
         this.content = content;
     }
 
@@ -41,6 +43,7 @@ public class Message {
     public String toString() {
         return "Message{" +
                 "sender='" + sender + '\'' +
+                ", receiver='" + receiver + '\'' +
                 ", content='" + content + '\'' +
                 ", timestamp='" + timestamp + '\'' +
                 '}';

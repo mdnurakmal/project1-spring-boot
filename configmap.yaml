@@ -1,5 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
+metadata:
+  name: example-configmap
 data:
   application.properties: |
     spring.kafka.consumer.bootstrap-servers = clusterip:9092

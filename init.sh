@@ -7,3 +7,4 @@ echo "running" $temp
 sed -i "s/clusterip/$temp/" ./configmap.yaml
 kubectl apply -f ./configmap.yaml
 kubectl apply -f ./deployment.yaml
+kubectl rollout restart deployment/demo

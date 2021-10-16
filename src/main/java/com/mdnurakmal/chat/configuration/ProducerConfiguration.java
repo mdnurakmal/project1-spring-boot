@@ -3,6 +3,7 @@ package com.mdnurakmal.chat.configuration;
 import com.mdnurakmal.chat.constants.KafkaConstants;
 import com.mdnurakmal.chat.model.Message;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -18,6 +19,8 @@ import java.util.Map;
 @EnableKafka
 @Configuration
 public class ProducerConfiguration {
+
+
     @Bean
     public ProducerFactory<String, Message> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigurations());

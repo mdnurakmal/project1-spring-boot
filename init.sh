@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x #echo on
 
 echo "hello"
 #temp=$(kubectl get services demo -o=jsonpath='{.spec.clusterIP}')

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sed -e clusterip -e $1 $2
+sed -e 'clusterip' -e $1 $2

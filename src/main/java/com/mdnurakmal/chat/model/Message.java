@@ -6,9 +6,6 @@ public class Message {
     private String content;
     private String timestamp;
 
-    public Message() {
-    }
-
     public String getTimestamp() {
         return timestamp;
     }
@@ -27,7 +24,7 @@ public class Message {
 
     public Message(String sender,String receiver, String content) {
         this.sender = sender;
-        this.receiver = receiver;
+        this.receiver= receiver;
         this.content = content;
     }
 
@@ -47,5 +44,13 @@ public class Message {
                 ", content='" + content + '\'' +
                 ", timestamp='" + timestamp + '\'' +
                 '}';
+    }
+
+    public String getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
     }
 }

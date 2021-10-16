@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: my-config
+data:
+  SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS: 111111hiya
+  SPRING_KAFKA_PRODUCER_BOOTSTRAP-SERVERS: 111111hiya

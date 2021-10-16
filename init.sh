@@ -1,8 +1,8 @@
 #!/bin/bash
-set -x #echo on
+set -x #echo onnano
 
 echo "hello"
 temp=$(kubectl get services demo -o=jsonpath='{.spec.clusterIP}')
 echo "running" $temp
-sed -i "s/clusterip/$temp/" configmap.yaml
-kubectl apply -f configmap.yaml
+sed -i "s/clusterip/$temp/" ./configmap.yaml
+kubectl apply -f ./configmap.yaml

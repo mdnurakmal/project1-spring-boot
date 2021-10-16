@@ -1,6 +1,6 @@
 #!/bin/bash
 
-clusterip=$(eval kubectl get services demo -o=jsonpath='{.spec.clusterIP}')
+temp=$(kubectl get services demo -o=jsonpath='{.spec.clusterIP}')
 
-sed -i "s/clusterip/$clusterip/" configmap.yaml
+sed -i "s/clusterip/$temp/" configmap.yaml
 kubectl apply -f configmap.yaml

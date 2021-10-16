@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sed "s/clusterip/$1/" $2
+sed -i "s/clusterip/$1/" $2

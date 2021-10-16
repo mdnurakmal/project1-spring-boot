@@ -20,9 +20,12 @@ spec:
       containers:
         - image: mdnurakmal/springboot-demo-1:latest
           name: springboot-demo-1
-          envFrom:
-            - configMapRef:
-                name: example-configmap
+          env:
+            - name: SPRING_APPLICATION_JSON
+              valueFrom:
+                configMapKeyRef:
+                  name: spring-config
+                  key: dev-config.json
           resources: {}
 
 status: {}

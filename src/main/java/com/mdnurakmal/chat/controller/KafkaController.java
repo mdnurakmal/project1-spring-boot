@@ -3,7 +3,7 @@ package com.mdnurakmal.chat.controller;
 import com.mdnurakmal.chat.constants.KafkaConstants;
 import com.mdnurakmal.chat.model.Message;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
+
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -19,9 +19,6 @@ public class KafkaController {
 
     @Autowired
     private KafkaTemplate<String, Message> kafkaTemplate;
-
-    @Autowired
-    private DiscoveryClient discoveryClient;
 
     @PostMapping(value = "/api/send", consumes = "application/json", produces = "application/json")
     public void sendMessage(@RequestBody Message message) {

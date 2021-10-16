@@ -1,8 +1,6 @@
 apiVersion: v1
-kind: ConfigMap
-metadata:
-  creationTimestamp: null
-  name: my-config
 data:
-  SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS: 111111hiya
-  SPRING_KAFKA_PRODUCER_BOOTSTRAP-SERVERS: 111111hiya
+  application.properties: |
+    spring.kafka.consumer.bootstrap-servers = 10.3.240.241:9092
+    spring.kafka.producer.bootstrap-servers = 10.3.240.241:9092
+kind: ConfigMap

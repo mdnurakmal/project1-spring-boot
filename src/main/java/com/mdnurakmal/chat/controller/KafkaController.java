@@ -1,6 +1,5 @@
 package com.mdnurakmal.chat.controller;
 
-import com.mdnurakmal.chat.constants.KafkaConstants;
 import com.mdnurakmal.chat.model.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,7 +15,7 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 public class KafkaController {
-
+    private static final String TOPIC = "mytopic";
     @Autowired
     private KafkaTemplate<String, Message> kafkaTemplate;
 
@@ -25,7 +24,7 @@ public class KafkaController {
         message.setTimestamp(LocalDateTime.now().toString());
         try {
             //Sending the message to kafka topic queue
-            kafkaTemplate.send(KafkaConstants.KAFKA_TOPIC, message).get();
+            kafkaTemplate.send(TOPIC, message).get();
 
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);

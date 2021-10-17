@@ -27,10 +27,10 @@ spec:
                 name: spring-config
                 key: SPRING_KAFKA_CONSUMER_BOOTSRAP-SERVERS
           - name: SPRING_KAFKA_PRODUCER_BOOTSRAP-SERVERS
-              valueFrom:
-                configMapKeyRef:
-                  name: spring-config
-                  key: SPRING_KAFKA_PRODUCER_BOOTSRAP-SERVERS
+            valueFrom:
+              configMapKeyRef:
+                name: spring-config
+                key: SPRING_KAFKA_PRODUCER_BOOTSRAP-SERVERS
           resources: {}
 
 status: {}

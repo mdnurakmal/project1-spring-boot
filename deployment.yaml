@@ -21,11 +21,16 @@ spec:
         - image: mdnurakmal/springboot-demo-1:latest
           name: springboot-demo-1
           env:
-            - name: SPRING_APPLICATION_JSON
+            - name: SPRING_KAFKA_CONSUMER_BOOTSRAP-SERVERS
               valueFrom:
                 configMapKeyRef:
                   name: spring-config
-                  key: dev-config.json
+                  key: SPRING_KAFKA_CONSUMER_BOOTSRAP-SERVERS
+            - name: SPRING_KAFKA_PRODUCER_BOOTSRAP-SERVERS
+                valueFrom:
+                  configMapKeyRef:
+                    name: spring-config
+                    key: SPRING_KAFKA_PRODUCER_BOOTSRAP-SERVERS
           resources: {}
 
 status: {}

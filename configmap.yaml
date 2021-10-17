@@ -3,7 +3,5 @@ kind: ConfigMap
 metadata:
   name: spring-config
 data:
-  dev-config.json:
-    '{
-      "clusterUrl": "clusterip"
-     }'
+  SPRING_KAFKA_CONSUMER_BOOTSRAP-SERVERS: kafka
+  SPRING_KAFKA_PRODUCER_BOOTSRAP-SERVERS: kafka

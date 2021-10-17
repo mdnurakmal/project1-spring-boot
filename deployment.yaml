@@ -25,12 +25,12 @@ spec:
             valueFrom:
               configMapKeyRef:
                 name: spring-config
-                key: SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS
+                key: spring.kafka.consumer.bootstrap-servers
           - name: SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS
             valueFrom:
               configMapKeyRef:
                 name: spring-config
-                key: SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS
+                key: spring.kafka.producer.bootstrap-servers
           resources: {}
 
 status: {}

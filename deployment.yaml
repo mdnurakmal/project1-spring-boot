@@ -22,10 +22,10 @@ spec:
           name: springboot-demo-1
           env:
             - name: SPRING_APPLICATION_JSON
-                valueFrom:
-                  configMapKeyRef:
-                    name: spring-config
-                    key: dev-config.json
+              valueFrom:
+                configMapKeyRef:
+                  name: spring-config
+                  key: dev-config.json
           resources: {}
 
 status: {}

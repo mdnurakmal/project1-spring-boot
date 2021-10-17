@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: spring-config
 data:
-  SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS: kafka
-  SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS: kafka
+  SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS: kafka.default.svc.cluster.local
+  SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS: kafka.default.svc.cluster.local

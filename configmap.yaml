@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: spring-config
 data:
-  spring.kafka.producer.bootstrap-servers: kafka
-  spring.kafka.consumer.bootstrap-servers: kafka
+  spring.kafka.producer.bootstrap-servers: kafka.default.svc.cluster.local:9092
+  spring.kafka.consumer.bootstrap-servers: kafka.default.svc.cluster.local:9092

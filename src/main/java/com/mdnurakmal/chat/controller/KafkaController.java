@@ -22,6 +22,7 @@ public class KafkaController {
 
     @PostMapping(value = "/api/send", consumes = "application/json", produces = "application/json")
     public void sendMessage(@RequestBody Message message) {
+        System.out.println(message);
         message.setTimestamp(LocalDateTime.now().toString());
         try {
             //Sending the message to kafka topic queue
@@ -34,9 +35,18 @@ public class KafkaController {
 
     @MessageMapping("/sendMessage")
     @SendTo("/topic/group")
-    public Message broadcastGroupMessage(@Payload Message message) {
+    public void broadcastGroupMessage(@Payload Message message) {
         //Sending this message to all the subscribers
-        return message;
+        message.setTimestamp(LocalDateTime.now().toString());
+        System.out.println(message);
+
+        try {
+            //Sending the message to kafka topic queue
+            kafkaTemplate.send(TOPIC, message).get();
+
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @MessageMapping("/newUser")

@@ -30,18 +30,12 @@ status: {}
 apiVersion: v1
 kind: Service
 metadata:
-  creationTimestamp: null
-  labels:
-    app: demo
-  name: demo
+  name: demo-service
 spec:
-  ports:
-    - name: 8080-8080
-      port: 8080
-      protocol: TCP
-      targetPort: 8080
+  type: NodePort
   selector:
     app: demo
-  type: ClusterIP
-status:
-  loadBalancer: {}
+  ports:
+    # By default and for convenience, the `targetPort` is set to the same value as the `port` field.
+    - port: 80
+      targetPort: 80

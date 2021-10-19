@@ -37,5 +37,5 @@ spec:
     app: demo
   ports:
     # By default and for convenience, the `targetPort` is set to the same value as the `port` field.
-    - port: 80
-      targetPort: 80
+    - port: 8080
+      targetPort: 8080

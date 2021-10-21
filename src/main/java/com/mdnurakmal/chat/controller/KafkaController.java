@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.concurrent.ExecutionException;
 
+import static org.springframework.kafka.support.KafkaHeaders.TOPIC;
+
 @RestController
 public class KafkaController {
-    private static final String TOPIC = "mytopic";
+
     @Autowired
     private KafkaTemplate<String, Message> kafkaTemplate;
 

@@ -17,6 +17,6 @@ public class MessageListener {
     @KafkaListener(topics = TOPIC)
     public void listen(Message message) {
         System.out.println("sending via kafka listener..");
-        System.out.println("Message received: " + message);
+        System.out.println("Message received: " + message.toString());
     }
 }

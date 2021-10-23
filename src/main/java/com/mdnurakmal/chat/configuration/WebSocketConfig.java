@@ -16,7 +16,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // chat client will use this to connect to the server
         registry.addEndpoint("/").setAllowedOrigins("http://localhost:4200","https://mdnurakmal.com","https://wschat.mdnurakmal.com"
-        ,"wss://wschat.mdnurakmal.com","ws://wschat.mdnurakmal.com");
+        ,"wss://wschat.mdnurakmal.com","ws://wschat.mdnurakmal.com","https://www.piesocket.com/","http://www.piesocket.com/");
     }
 
     @Override

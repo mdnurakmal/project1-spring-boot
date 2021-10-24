@@ -3,19 +3,19 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    app: demo
-  name: demo
+    app: spring-boot
+  name: spring-boot
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: demo
+      app: spring-boot
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: demo
+        app: spring-boot
     spec:
       containers:
         - image: mdnurakmal/springboot-demo-1:latest
@@ -34,11 +34,11 @@ kind: Service
 metadata:
   annotations:
    beta.cloud.google.com/backend-config: '{"ports": {"8080":"my-backendconfig"}}'
-  name: demo-service
+  name: spring-boot-service
 spec:
   type: NodePort
   selector:
-    app: demo
+    app: spring-boot
   ports:
     # By default and for convenience, the `targetPort` is set to the same value as the `port` field.
     - port: 8080

@@ -36,7 +36,7 @@ metadata:
    beta.cloud.google.com/backend-config: '{"ports": {"8080":"my-backendconfig"}}'
   name: demo-service
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: demo
   ports:

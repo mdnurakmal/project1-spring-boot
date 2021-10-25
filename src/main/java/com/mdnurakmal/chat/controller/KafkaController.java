@@ -4,16 +4,17 @@ import com.mdnurakmal.chat.model.Message;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.PartitionInfo;
+import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Duration;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -61,27 +62,44 @@ public class KafkaController {
             System.out.println("sending to kafka at topic:" + "topic.messages." + sender.hashCode()  +"." + recipient.hashCode() );
 
             kafkaTemplate.send("topic.messages." +   sender.hashCode()  +"." +   recipient.hashCode()  , message).get();
-            getAllMessages("topic.messages." +   sender.hashCode()  +"." +   recipient.hashCode());
+            seekToStart("topic.messages." +   sender.hashCode()  +"." +   recipient.hashCode());
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void getAllMessages(String topic){
-        System.out.println("GETTING ALL MESSAGES" );
+    public void seekToStart(String topic ) {
+        // configuration
+        Map<String, Object> consumerConfig = new HashMap<>(consumerFactory.getConfigurationProperties());
+        consumerConfig.put(ConsumerConfig.GROUP_ID_CONFIG, "SEEKTOSTART");
+        consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        KafkaConsumer<String, Message> consumer = new KafkaConsumer<>(consumerConfig);
 
-        Map<String, Object> props = new HashMap<>(consumerFactory.getConfigurationProperties());
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,  "earliest");
-        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
-        KafkaConsumer<Message, String> consumer = new KafkaConsumer<>(props);
-        consumer.subscribe(Collections.singletonList(topic));
-
-        var records = consumer.poll(Duration.ofMillis(100));
-
-        for (var record : records) {
-            System.out.printf("Got record with value %s%n", record.value());
+        List<TopicPartition> topicPartitions = new ArrayList<>();
+        for (PartitionInfo partitionInfo : consumer.partitionsFor(topic)) {
+            topicPartitions.add(new TopicPartition(partitionInfo.topic(), partitionInfo.partition()));
         }
+
+        // seek from first
+        consumer.assign(topicPartitions);
+        consumer.seekToBeginning(consumer.assignment());
+
+        ConsumerRecords<String, Message> records = consumer.poll(Duration.ofMillis(1_000));
+
+        records.forEach(record -> {
+            System.out.println("partition: " + record.partition() +
+                    ", topic: " + record.topic() +
+                    ", offset: " + record.offset() +
+                    ", key: " + record.key() +
+                    ", value: " + record.value());
+        });
+
+
     }
+
+
+
 
     @MessageMapping("/newUser")
     @SendTo("/topic/group")

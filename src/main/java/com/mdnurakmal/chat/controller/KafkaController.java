@@ -75,8 +75,9 @@ public class KafkaController {
         Map<String, Object> consumerConfig = new HashMap<>(consumerFactory.getConfigurationProperties());
         consumerConfig.put(ConsumerConfig.GROUP_ID_CONFIG, "SEEKTOSTART");
         consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        KafkaConsumer<String, Message> consumer = new KafkaConsumer<>(consumerConfig);
+        consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
 
         List<TopicPartition> topicPartitions = new ArrayList<>();
         for (PartitionInfo partitionInfo : consumer.partitionsFor(topic)) {
@@ -87,7 +88,7 @@ public class KafkaController {
         consumer.assign(topicPartitions);
         consumer.seekToBeginning(consumer.assignment());
 
-        ConsumerRecords<String, Message> records = consumer.poll(Duration.ofMillis(1_000));
+        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1_000));
 
         records.forEach(record -> {
             System.out.println("partition: " + record.partition() +

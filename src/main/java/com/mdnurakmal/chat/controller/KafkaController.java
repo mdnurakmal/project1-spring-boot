@@ -8,6 +8,7 @@ import org.apache.kafka.common.PartitionInfo;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Duration;
@@ -22,6 +23,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -37,6 +39,9 @@ public class KafkaController {
 
     @Autowired
     private KafkaTemplate<String, Message> kafkaTemplate;
+
+    @Autowired
+    SimpMessagingTemplate messagingTemplate;
 
     @PostMapping(value = "/api/send", consumes = "application/json", produces = "application/json")
     public void sendMessage(@RequestBody Message message) {
@@ -90,6 +95,8 @@ public class KafkaController {
         ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1_000));
 
         records.forEach(record -> {
+            JSONObject jsonObject= new JSONObject(record.value() );
+            messagingTemplate.convertAndSend( "/topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"),jsonObject.toString());
             System.out.println("partition: " + record.partition() +
                     ", topic: " + record.topic() +
                     ", offset: " + record.offset() +

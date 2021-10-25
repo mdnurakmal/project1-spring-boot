@@ -1,6 +1,5 @@
 package com.mdnurakmal.chat.controller;
 
-import com.mdnurakmal.chat.configuration.KafkaConsumerConfig;
 import com.mdnurakmal.chat.model.Message;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;

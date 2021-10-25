@@ -69,7 +69,6 @@ public class KafkaController {
             System.out.println("sending to kafka at topic:" + "topic.messages." + sender.hashCode()  +"." + recipient.hashCode() );
 
             kafkaTemplate.send("topic.messages." +   sender.hashCode()  +"." +   recipient.hashCode()  , message).get();
-            seekToStart("topic.messages." +   sender.hashCode()  +"." +   recipient.hashCode());
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }

@@ -47,9 +47,9 @@ public class KafkaController {
 
         try {
             //Sending the message to kafka topic queue
-            System.out.println("sending to kafka at topic:" + "topic.messages." + UUID.fromString(sender) +"." + UUID.fromString(recipient));
+            System.out.println("sending to kafka at topic:" + "topic.messages." + sender.hashCode()  +"." + recipient.hashCode() );
 
-            kafkaTemplate.send("topic.messages." +   UUID.fromString(sender)  +"." +   UUID.fromString(recipient) , message).get();
+            kafkaTemplate.send("topic.messages." +   sender.hashCode()  +"." +   recipient.hashCode()  , message).get();
 
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);

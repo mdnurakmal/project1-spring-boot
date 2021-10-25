@@ -31,10 +31,10 @@ public class MessageListener {
 //        ((ObjectNode)data).put("content", "from kafka listener");
         JSONObject jsonObject= new JSONObject(message );
         jsonObject.put("content","from kafkalistener");
-        System.out.println("sending via kafka listener..TO :" + "/topic/messages/jsonObject.getString(\"sender\")/jsonObject.getString(\"content\")");
+        System.out.println("sending via kafka listener..TO :" + "/topic/messages/"+jsonObject.getString("sender")+"/"+jsonObject.getString("content"));
         System.out.println("Message received: " + jsonObject.toString());
         System.out.println("Json converted: " + jsonObject.getString("sender"));
-        messagingTemplate.convertAndSend( "/topic/messages/jsonObject.getString(\"sender\")/jsonObject.getString(\"content\")",jsonObject.toString());
+        messagingTemplate.convertAndSend( "/topic/messages/"+jsonObject.getString("sender")+"/"+jsonObject.getString("content"),jsonObject.toString());
   }
 }
 

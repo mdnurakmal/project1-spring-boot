@@ -73,7 +73,7 @@ public class KafkaController {
         Map<String, Object> props = new HashMap<>(consumerFactory.getConfigurationProperties());
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,  "earliest");
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
-        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
+        KafkaConsumer<Message, String> consumer = new KafkaConsumer<>(props);
         consumer.subscribe(Collections.singletonList(topic));
 
         var records = consumer.poll(Duration.ofMillis(100));

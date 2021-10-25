@@ -24,13 +24,7 @@ public class MessageListener {
 
     @KafkaListener(topicPattern  = "topic.messages.*.*")
     public void reply(@Payload String message) throws JsonProcessingException {
-//        JsonNode data = new ObjectMapper().readTree(message);
-//        System.out.println("sending via kafka listener..");
-//        System.out.println("Message received: " + message.toString());
-//        System.out.println("Json converted: " + data);
-//        ((ObjectNode)data).put("content", "from kafka listener");
         JSONObject jsonObject= new JSONObject(message );
-        jsonObject.put("content","from kafkalistener");
         System.out.println("sending via kafka listener..TO :" + "/topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"));
         System.out.println("Message received: " + jsonObject.toString());
         System.out.println("Json converted: " + jsonObject.getString("sender"));

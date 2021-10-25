@@ -77,19 +77,8 @@ public class KafkaController {
 
     @MessageMapping("/topic/getallmessages/{sender}/{recipient}")
     public void getallmessages(@DestinationVariable String sender, @DestinationVariable String recipient, @Payload Message message) {
-        //Sending this message to all the subscribers
-        //message.setTimestamp(LocalDateTime.now().toString());
-        System.out.println("receive message from " + sender + " , to: " + recipient + " / " + message);
-
-        try {
-            //Sending the message to kafka topic queue
-            System.out.println("sending to kafka at topic:" + "topic.messages." + sender.hashCode()  +"." + recipient.hashCode() );
-
-            kafkaTemplate.send("topic.messages." +   sender.hashCode()  +"." +   recipient.hashCode()  , message).get();
-            seekToStart("topic.messages." +   sender.hashCode()  +"." +   recipient.hashCode());
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-        }
+        System.out.println("get all messages  from " + sender + " , to: " + recipient + " / " + message);
+        seekToStart("topic.messages." +   sender.hashCode()  +"." +   recipient.hashCode());
     }
 
     public void seekToStart(String topic ) {

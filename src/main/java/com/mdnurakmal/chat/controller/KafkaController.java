@@ -102,6 +102,8 @@ public class KafkaController {
 
         records.forEach(record -> {
             JSONObject jsonObject= new JSONObject(record.value() );
+            System.out.println("sending !! /topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"));
+
             messagingTemplate.convertAndSend( "/topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"),jsonObject.toString());
             System.out.println("partition: " + record.partition() +
                     ", topic: " + record.topic() +

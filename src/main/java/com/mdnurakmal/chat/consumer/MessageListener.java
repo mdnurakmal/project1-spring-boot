@@ -18,7 +18,7 @@ public class MessageListener {
     @Autowired
     SimpMessagingTemplate template;
 
-    @KafkaListener(topics = "/topic/messages/*/*")
+    @KafkaListener(topicPattern  = "/topic/messages/*/*")
     public void listen(@Payload String message) throws JsonProcessingException {
         JsonNode data = new ObjectMapper().readTree(message);
         System.out.println("sending via kafka listener..");

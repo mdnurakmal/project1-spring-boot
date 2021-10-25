@@ -10,4 +10,4 @@ set -x #echo onnano
 
 kubectl apply -f ./configmap.yaml
 kubectl apply -f ./deployment.yaml
-kubectl rollout restart deployment/demo
+kubectl rollout restart deployment/spring-boot

@@ -76,7 +76,7 @@ public class KafkaController {
     }
 
     @MessageMapping("/topic/getallmessages/{sender}/{recipient}")
-    public void getallmessages(@DestinationVariable String sender, @DestinationVariable String recipient, @Payload Message message) {
+    public void getallmessages(@DestinationVariable String sender, @DestinationVariable String recipient, @Payload String message) {
         System.out.println("get all messages  from " + sender + " , to: " + recipient + " / " + message);
         seekToStart("topic.messages." +   sender.hashCode()  +"." +   recipient.hashCode());
     }

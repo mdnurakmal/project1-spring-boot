@@ -73,7 +73,6 @@ public class KafkaController {
     public void seekToStart(String topic ) {
         // configuration
         Map<String, Object> consumerConfig = new HashMap<>(consumerFactory.getConfigurationProperties());
-        consumerConfig.put(ConsumerConfig.GROUP_ID_CONFIG, "SEEKTOSTART");
         consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 

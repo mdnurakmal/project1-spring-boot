@@ -3,7 +3,7 @@ package com.mdnurakmal.chat.controller;
 import com.mdnurakmal.chat.model.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
+import java.util.UUID;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -47,8 +47,9 @@ public class KafkaController {
 
         try {
             //Sending the message to kafka topic queue
-            System.out.println("sending to kafka at topic:" + "topic.messages." + sender +"." + recipient);
-            kafkaTemplate.send("topic.messages." + sender +"." + recipient, message).get();
+            System.out.println("sending to kafka at topic:" + "topic.messages." + UUID.fromString(sender) +"." + UUID.fromString(recipient));
+
+            kafkaTemplate.send("topic.messages." +   UUID.fromString(sender)  +"." +   UUID.fromString(recipient) , message).get();
 
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);

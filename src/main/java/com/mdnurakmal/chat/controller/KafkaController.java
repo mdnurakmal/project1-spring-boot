@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -35,16 +36,19 @@ public class KafkaController {
         }
     }
 
-    @MessageMapping("/sendMessage")
-    @SendTo("/topic/group")
-    public void broadcastGroupMessage(@Payload Message message) {
+    //@MessageMapping("/sendMessage")
+    //@MessageMapping("/topic/messages")
+    @MessageMapping("/topic/messages/{sender}/{recipient}")
+    @SendTo("/topic/messages/{sender}/{recipient}")
+    public void broadcastGroupMessage(@DestinationVariable String sender, @DestinationVariable String recipient, @Payload Message message) {
         //Sending this message to all the subscribers
-        message.setTimestamp(LocalDateTime.now().toString());
-        System.out.println(message);
+        //message.setTimestamp(LocalDateTime.now().toString());
+        System.out.println("receive message from " + sender + " , to: " + recipient + " / " + message);
 
         try {
             //Sending the message to kafka topic queue
-            kafkaTemplate.send(TOPIC, message).get();
+            System.out.println("sending to kafka at topic:" + "/topic/messages/" + sender +"/" + recipient);
+            kafkaTemplate.send("/topic/messages/" + sender +"/" + recipient, message).get();
 
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);

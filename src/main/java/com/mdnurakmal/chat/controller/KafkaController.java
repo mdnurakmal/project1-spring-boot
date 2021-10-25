@@ -2,6 +2,7 @@ package com.mdnurakmal.chat.controller;
 
 import com.mdnurakmal.chat.model.Message;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -74,11 +75,12 @@ public class KafkaController {
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
         consumer.subscribe(Collections.singletonList(topic));
-        consumer.poll(Duration.ofMillis(100));  // without this, the assignment will be empty.
-        consumer.assignment().forEach(t -> {
-            System.out.printf("Set %s to offset 0%n", t.toString());
-            consumer.seek(t, 0);
-        });
+
+        var records = consumer.poll(Duration.ofMillis(100));
+
+        for (var record : records) {
+            System.out.printf("Got record with value %s%n", record.value());
+        }
     }
 
     @MessageMapping("/newUser")

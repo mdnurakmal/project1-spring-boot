@@ -39,7 +39,6 @@ public class KafkaController {
     //@MessageMapping("/sendMessage")
     //@MessageMapping("/topic/messages")
     @MessageMapping("/topic/messages/{sender}/{recipient}")
-    @SendTo("/topic/messages/{sender}/{recipient}")
     public void broadcastGroupMessage(@DestinationVariable String sender, @DestinationVariable String recipient, @Payload Message message) {
         //Sending this message to all the subscribers
         //message.setTimestamp(LocalDateTime.now().toString());

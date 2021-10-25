@@ -47,8 +47,8 @@ public class KafkaController {
 
         try {
             //Sending the message to kafka topic queue
-            System.out.println("sending to kafka at topic:" + "/topic/messages/" + sender +"/" + recipient);
-            kafkaTemplate.send("/topic/messages/" + sender +"/" + recipient, message).get();
+            System.out.println("sending to kafka at topic:" + "topic.messages." + sender +"." + recipient);
+            kafkaTemplate.send("topic.messages." + sender +"." + recipient, message).get();
 
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);

@@ -74,10 +74,20 @@ public class KafkaController {
         }
     }
 
-    @MessageMapping("/topic/getallmessages/{sender}/{recipient}")
-    public void getallmessages(@DestinationVariable String sender, @DestinationVariable String recipient, @Payload String message) {
-        System.out.println("get all messages  from " + sender + " , to: " + recipient + " / " + message);
-        seekToStart("topic.messages." +   sender.hashCode()  +"." +   recipient.hashCode());
+    @MessageMapping("/topic/getallmessagesfromuser/{recipient}/{sender}")
+    public void getallmessagesfromuser(@DestinationVariable String recipient, @DestinationVariable String sender, @Payload String message) {
+        System.out.println("get all messages  from " + recipient + " , to: " + sender + " / " + message);
+        seekToStart("topic.messages." +   recipient.hashCode()  +"." +   sender.hashCode());
+    }
+
+    @MessageMapping("/topic/getallmessagesforuser/{sender}")
+    public void getallmessagesfromalluser(@DestinationVariable String sender, @Payload String message) {
+        seekToStart("topic.messages.*." + sender.hashCode());
+    }
+
+    @MessageMapping("/topic/getallmessagessend/{sender}")
+    public void getallmessagessend(@DestinationVariable String sender, @Payload String message) {
+        seekToStart("topic.messages."+sender.hashCode()+".*");
     }
 
     public void seekToStart(String topic ) {

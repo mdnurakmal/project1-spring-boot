@@ -103,18 +103,20 @@ public class KafkaController {
         var pattern = Pattern.compile("topic.messages.*." + sender.hashCode());
         consumer.subscribe(pattern);
 
-        Set<TopicPartition> partitions = consumer.assignment();
-        partitions.forEach(part->System.out.println("<><>"+part.partition()));
-//
-//        Map<String, List<PartitionInfo>> topicPartitionsMap = consumer.listTopics();
-//        List<TopicPartition> topicPartitions = new ArrayList<>();
-//        for (List<PartitionInfo> partitionInfoList : topicPartitionsMap.values()) {
-//            for (PartitionInfo partitionInfo : partitionInfoList) {
-//                topicPartitions.add(new TopicPartition(partitionInfo.topic(), partitionInfo.partition()));
-//
-//                System.out.println(partitionInfo.topic() + " >>>>>>>>");
-//            }
-//        }
+        consumer.seekToBeginning(Collections.emptySet());
+        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1_000)); //no loop to simplify
+
+        records.forEach(record -> {
+            JSONObject jsonObject= new JSONObject(record.value() );
+            System.out.println("sending !! /topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"));
+
+            messagingTemplate.convertAndSend( "/topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"),jsonObject.toString());
+            System.out.println("partition: " + record.partition() +
+                    ", topic: " + record.topic() +
+                    ", offset: " + record.offset() +
+                    ", key: " + record.key() +
+                    ", value: " + record.value());
+        });
     }
 
     public void seekToStart(String topic ) {

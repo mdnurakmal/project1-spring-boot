@@ -1,10 +1,7 @@
 package com.mdnurakmal.chat.controller;
 
 import com.mdnurakmal.chat.model.Message;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.PartitionInfo;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -99,24 +96,38 @@ public class KafkaController {
         consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 
-
+        var pattern = Pattern.compile("topic.messages.*." + sender.hashCode());
+        System.out.println("subscribing");
 
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
 
-        var pattern = Pattern.compile("topic.messages.*." + sender.hashCode());
-        System.out.println("subscribing");
-        consumer.subscribe(pattern);
+        consumer.subscribe(pattern, new ConsumerRebalanceListener() {
 
-        System.out.println("getting assignment");
-        Set<TopicPartition> partitions = consumer.assignment();
-        partitions.forEach(part->System.out.println(part.partition()));
+            @Override
+            public void onPartitionsRevoked(Collection<TopicPartition> partitions) {}
+
+            @Override
+            public void onPartitionsAssigned(Collection<TopicPartition> partitions) {
+                System.out.println("inside on partitionassigned");
+                System.out.println("Assigned " + partitions);
+                consumer.seekToBeginning(partitions);
+            }
+        });
 
 
-        //consumer.assign(partitions);
-
-        System.out.println("seek to beginning");
-        consumer.seekToBeginning(consumer.assignment());
-        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1_000)); //no loop to simplify
+//        consumer.subscribe(pattern);
+//
+//        System.out.println("getting assignment");
+//        Set<TopicPartition> partitions = consumer.assignment();
+//        partitions.forEach(part->System.out.println(part.partition()));
+//
+//
+//        //consumer.assign(partitions);
+//
+//        System.out.println("seek to beginning");
+//        consumer.seekToBeginning(consumer.assignment());
+        System.out.println("polling");
+        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
 
         records.forEach(record -> {
             JSONObject jsonObject= new JSONObject(record.value() );
@@ -130,7 +141,7 @@ public class KafkaController {
                     ", value: " + record.value());
         });
 
-
+        System.out.println("ended");
 
 
 

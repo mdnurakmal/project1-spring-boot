@@ -125,8 +125,12 @@ public class KafkaController {
                             ", key: " + record.key() +
                             ", value: " + record.value());
                 });
+
             }
         });
+
+        consumer.poll(Duration.ofMillis(1_000));
+
 
 
 

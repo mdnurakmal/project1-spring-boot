@@ -104,10 +104,18 @@ public class KafkaController {
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
 
         var pattern = Pattern.compile("topic.messages.*." + sender.hashCode());
+        System.out.println("subscribing");
         consumer.subscribe(pattern);
-        consumer.poll(Duration.ofMillis(1_000));
-        consumer.seekToBeginning(consumer.assignment());
 
+        System.out.println("getting assignment");
+        Set<TopicPartition> partitions = consumer.assignment();
+        partitions.forEach(part->System.out.println(part.partition()));
+
+
+        consumer.assign(partitions);
+
+        System.out.println("seek to beginning");
+        consumer.seekToBeginning(consumer.assignment());
         ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1_000)); //no loop to simplify
 
         records.forEach(record -> {

@@ -112,7 +112,7 @@ public class KafkaController {
         partitions.forEach(part->System.out.println(part.partition()));
 
 
-        consumer.assign(partitions);
+        //consumer.assign(partitions);
 
         System.out.println("seek to beginning");
         consumer.seekToBeginning(consumer.assignment());

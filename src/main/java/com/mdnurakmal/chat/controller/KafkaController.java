@@ -105,6 +105,7 @@ public class KafkaController {
 
         var pattern = Pattern.compile("topic.messages.*." + sender.hashCode());
         consumer.subscribe(pattern);
+        consumer.poll(Duration.ofMillis(1_000));
         consumer.seekToBeginning(consumer.assignment());
 
         ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1_000)); //no loop to simplify
@@ -113,7 +114,7 @@ public class KafkaController {
             JSONObject jsonObject= new JSONObject(record.value() );
             System.out.println("sending !! /topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"));
 
-            messagingTemplate.convertAndSend( "/topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"),jsonObject.toString());
+            //messagingTemplate.convertAndSend( "/topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"),jsonObject.toString());
             System.out.println("partition: " + record.partition() +
                     ", topic: " + record.topic() +
                     ", offset: " + record.offset() +

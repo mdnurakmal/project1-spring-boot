@@ -112,26 +112,26 @@ public class KafkaController {
             public void onPartitionsAssigned(Collection<TopicPartition> partitions) {
                 consumer.seekToBeginning(partitions);
 
+                ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1_000)); //no loop to simplify
+
+                records.forEach(record -> {
+                    JSONObject jsonObject= new JSONObject(record.value() );
+                    System.out.println("sending !! /topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"));
+
+                    messagingTemplate.convertAndSend( "/topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"),jsonObject.toString());
+                    System.out.println("partition: " + record.partition() +
+                            ", topic: " + record.topic() +
+                            ", offset: " + record.offset() +
+                            ", key: " + record.key() +
+                            ", value: " + record.value());
+                });
+
 
 
             }
         });
 
         consumer.poll(Duration.ofMillis(1_000));
-
-        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1_000)); //no loop to simplify
-
-        records.forEach(record -> {
-            JSONObject jsonObject= new JSONObject(record.value() );
-            System.out.println("sending !! /topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"));
-
-            messagingTemplate.convertAndSend( "/topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"),jsonObject.toString());
-            System.out.println("partition: " + record.partition() +
-                    ", topic: " + record.topic() +
-                    ", offset: " + record.offset() +
-                    ", key: " + record.key() +
-                    ", value: " + record.value());
-        });
 
 
 

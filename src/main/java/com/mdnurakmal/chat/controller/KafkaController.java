@@ -103,15 +103,18 @@ public class KafkaController {
         var pattern = Pattern.compile("topic.messages.*." + sender.hashCode());
         consumer.subscribe(pattern);
 
-        Map<String, List<PartitionInfo>> topicPartitionsMap = consumer.listTopics();
-        List<TopicPartition> topicPartitions = new ArrayList<>();
-        for (List<PartitionInfo> partitionInfoList : topicPartitionsMap.values()) {
-            for (PartitionInfo partitionInfo : partitionInfoList) {
-                topicPartitions.add(new TopicPartition(partitionInfo.topic(), partitionInfo.partition()));
-
-                System.out.println(partitionInfo.topic() + " >>>>>>>>");
-            }
-        }
+        Set<TopicPartition> partitions = consumer.assignment();
+        partitions.forEach(part->System.out.println("<><>"+part.partition()));
+//
+//        Map<String, List<PartitionInfo>> topicPartitionsMap = consumer.listTopics();
+//        List<TopicPartition> topicPartitions = new ArrayList<>();
+//        for (List<PartitionInfo> partitionInfoList : topicPartitionsMap.values()) {
+//            for (PartitionInfo partitionInfo : partitionInfoList) {
+//                topicPartitions.add(new TopicPartition(partitionInfo.topic(), partitionInfo.partition()));
+//
+//                System.out.println(partitionInfo.topic() + " >>>>>>>>");
+//            }
+//        }
     }
 
     public void seekToStart(String topic ) {

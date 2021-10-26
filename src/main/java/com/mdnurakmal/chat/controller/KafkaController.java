@@ -81,13 +81,33 @@ public class KafkaController {
     }
 
     @MessageMapping("/topic/getallmessagesforuser/{sender}")
-    public void getallmessagesfromalluser(@DestinationVariable String sender, @Payload String message) {
-        seekToStart("topic.messages.*." + sender.hashCode());
+    public void getallmessagesforuser(@DestinationVariable String sender, @Payload String message) {
+        getUniqueUser();
+        //"topic.messages.*." + sender.hashCode()
     }
 
     @MessageMapping("/topic/getallmessagessend/{sender}")
     public void getallmessagessend(@DestinationVariable String sender, @Payload String message) {
         seekToStart("topic.messages."+sender.hashCode()+".*");
+    }
+
+    public void getUniqueUser(){
+        // configuration
+        Map<String, Object> consumerConfig = new HashMap<>(consumerFactory.getConfigurationProperties());
+        consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
+
+        Map<String, List<PartitionInfo>> topicPartitionsMap = consumer.listTopics();
+        List<TopicPartition> topicPartitions = new ArrayList<>();
+        for (List<PartitionInfo> partitionInfoList : topicPartitionsMap.values()) {
+            for (PartitionInfo partitionInfo : partitionInfoList) {
+                topicPartitions.add(new TopicPartition(partitionInfo.topic(), partitionInfo.partition()));
+
+                System.out.println(partitionInfo.topic() + " >>>>>>>>");
+            }
+        }
     }
 
     public void seekToStart(String topic ) {

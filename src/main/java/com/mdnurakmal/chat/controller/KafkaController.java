@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Pattern;
 
 import static org.springframework.kafka.support.KafkaHeaders.TOPIC;
 
@@ -82,7 +83,7 @@ public class KafkaController {
 
     @MessageMapping("/topic/getallmessagesforuser/{sender}")
     public void getallmessagesforuser(@DestinationVariable String sender, @Payload String message) {
-        getUniqueUser();
+        getUniqueUser(sender);
         //"topic.messages.*." + sender.hashCode()
     }
 
@@ -91,13 +92,16 @@ public class KafkaController {
         seekToStart("topic.messages."+sender.hashCode()+".*");
     }
 
-    public void getUniqueUser(){
+    public void getUniqueUser(String sender){
         // configuration
         Map<String, Object> consumerConfig = new HashMap<>(consumerFactory.getConfigurationProperties());
         consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
+
+        var pattern = Pattern.compile("topic.messages.*." + sender.hashCode());
+        consumer.subscribe(pattern);
 
         Map<String, List<PartitionInfo>> topicPartitionsMap = consumer.listTopics();
         List<TopicPartition> topicPartitions = new ArrayList<>();

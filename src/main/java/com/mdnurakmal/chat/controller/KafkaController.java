@@ -111,6 +111,7 @@ public class KafkaController {
             @Override
             public void onPartitionsAssigned(Collection<TopicPartition> partitions) {
                 consumer.seekToBeginning(partitions);
+                System.out.println("son partition assigned");
 
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1_000)); //no loop to simplify
 
@@ -127,11 +128,13 @@ public class KafkaController {
                 });
 
 
-
             }
         });
 
+        System.out.println("start to poll");
+
         consumer.poll(Duration.ofMillis(1_000));
+
 
 
 

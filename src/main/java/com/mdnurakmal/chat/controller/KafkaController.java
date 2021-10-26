@@ -2,6 +2,7 @@ package com.mdnurakmal.chat.controller;
 
 import com.mdnurakmal.chat.model.Message;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.PartitionInfo;
@@ -101,22 +102,34 @@ public class KafkaController {
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
 
         var pattern = Pattern.compile("topic.messages.*." + sender.hashCode());
-        consumer.subscribe(pattern);
+        consumer.subscribe(pattern, new ConsumerRebalanceListener() {
+            @Override
+            public void onPartitionsRevoked(Collection<TopicPartition> partitions) {
 
-        consumer.seekToBeginning(Collections.emptySet());
-        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1_000)); //no loop to simplify
+            }
 
-        records.forEach(record -> {
-            JSONObject jsonObject= new JSONObject(record.value() );
-            System.out.println("sending !! /topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"));
+            @Override
+            public void onPartitionsAssigned(Collection<TopicPartition> partitions) {
+                consumer.seekToBeginning(partitions);
 
-            messagingTemplate.convertAndSend( "/topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"),jsonObject.toString());
-            System.out.println("partition: " + record.partition() +
-                    ", topic: " + record.topic() +
-                    ", offset: " + record.offset() +
-                    ", key: " + record.key() +
-                    ", value: " + record.value());
+                ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1_000)); //no loop to simplify
+
+                records.forEach(record -> {
+                    JSONObject jsonObject= new JSONObject(record.value() );
+                    System.out.println("sending !! /topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"));
+
+                    messagingTemplate.convertAndSend( "/topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"),jsonObject.toString());
+                    System.out.println("partition: " + record.partition() +
+                            ", topic: " + record.topic() +
+                            ", offset: " + record.offset() +
+                            ", key: " + record.key() +
+                            ", value: " + record.value());
+                });
+            }
         });
+
+
+
     }
 
     public void seekToStart(String topic ) {

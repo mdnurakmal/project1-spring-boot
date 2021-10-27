@@ -97,25 +97,28 @@ public class KafkaController {
         consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 
-        var pattern = Pattern.compile("topic.messages."+sender.hashCode()+"." + sender.hashCode());
+        var pattern = Pattern.compile("topic.messages.*." + sender.hashCode());
         System.out.println("subscribing");
 
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
-        consumer.assign(consumer.partitionsFor("topic.messages.*." + sender.hashCode()).stream().map(partitionInfo -> new TopicPartition(partitionInfo.topic(), partitionInfo.partition())).collect(Collectors.toSet()));
-//        consumer.subscribe(pattern, new ConsumerRebalanceListener() {
-//
-//            @Override
-//            public void onPartitionsRevoked(Collection<TopicPartition> partitions) {}
-//
-//            @Override
-//            public void onPartitionsAssigned(Collection<TopicPartition> partitions) {
-//                System.out.println("inside on partitionassigned");
-//                System.out.println("Assigned " + partitions);
-//                consumer.seekToBeginning(partitions);
-//            }
-//        });
+        //consumer.assign(consumer.partitionsFor("topic.messages.*." + sender.hashCode()).stream().map(partitionInfo -> new TopicPartition(partitionInfo.topic(), partitionInfo.partition())).collect(Collectors.toSet()));
+        consumer.subscribe(pattern, new ConsumerRebalanceListener() {
 
-        consumer.seekToBeginning(consumer.assignment());
+            @Override
+            public void onPartitionsRevoked(Collection<TopicPartition> partitions) {
+                System.out.println("onPartitionsRevoked");
+            }
+
+            @Override
+            public void onPartitionsAssigned(Collection<TopicPartition> partitions) {
+                System.out.println("onPartitionsAssigned");
+                System.out.println("Assigned " + partitions);
+                consumer.seekToBeginning(partitions);
+            }
+        });
+
+        System.out.println("rebalance");
+        consumer.enforceRebalance();
 
 //        consumer.subscribe(pattern);
 //

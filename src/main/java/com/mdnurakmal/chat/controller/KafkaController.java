@@ -93,54 +93,40 @@ public class KafkaController {
 
     public void getUniqueUser(String sender){
         // configuration
-        Map<String, Object> consumerConfig = new HashMap<>(consumerFactory.getConfigurationProperties());
-        consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        consumerConfig.put(ConsumerConfig.METADATA_MAX_AGE_CONFIG	,5000);
-        consumerConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        System.out.println("subscribing");
+//        Map<String, Object> consumerConfig = new HashMap<>(consumerFactory.getConfigurationProperties());
+//        consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+//        consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+//        consumerConfig.put(ConsumerConfig.METADATA_MAX_AGE_CONFIG	,5000);
+//        consumerConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+//        System.out.println("subscribing");
+//
+//        var pattern = Pattern.compile("topic.messages.*."+sender.hashCode());
+//        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
+//        consumer.subscribe(pattern);
+//        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
+//        System.out.println("******************************************");
+//        records.forEach(record -> {
+//            JSONObject jsonObject= new JSONObject(record.value() );
+//            System.out.println("partition: " + record.partition() +
+//                    ", topic: " + record.topic() +
+//                    ", offset: " + record.offset() +
+//                    ", key: " + record.key() +
+//                    ", value: " + record.value());
+//        });
+//
+//        consumer.seekToBeginning(consumer.assignment());
 
-        var pattern = Pattern.compile("topic.messages.*."+sender.hashCode());
-        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
-        consumer.subscribe(pattern);
-        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
-        System.out.println("******************************************");
-        records.forEach(record -> {
-            JSONObject jsonObject= new JSONObject(record.value() );
-            System.out.println("partition: " + record.partition() +
-                    ", topic: " + record.topic() +
-                    ", offset: " + record.offset() +
-                    ", key: " + record.key() +
-                    ", value: " + record.value());
-        });
-
-        consumer.seekToBeginning(consumer.assignment());
-        System.out.println("******************************************");
         Map<String, List<PartitionInfo>> topics = consumer.listTopics();
 
-        System.out.println("******************************************");
-        System.out.println("          L I S T    T O P I C S          ");
-        System.out.println("******************************************\n");
 
         for (Map.Entry<String, List<PartitionInfo>> topic : topics.entrySet()) {
             System.out.println("Topic: "+ topic.getKey());
+            if( Integer.parseInt(topic.getKey().split(".")[3])==sender.hashCode())
+            {
+                System.out.println("matched**********" + topic.getKey());
+            }
             System.out.println("Value: " + topic.getValue() + "\n");
         }
-        System.out.println("******************************************");
-        records = consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
-
-        records.forEach(record -> {
-            JSONObject jsonObject= new JSONObject(record.value() );
-            System.out.println("partition: " + record.partition() +
-                    ", topic: " + record.topic() +
-                    ", offset: " + record.offset() +
-                    ", key: " + record.key() +
-                    ", value: " + record.value());
-        });
-        System.out.println("ended");
-
-
-
     }
 
     public void seekToStart(String topic ) {

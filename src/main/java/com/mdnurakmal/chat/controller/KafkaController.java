@@ -102,7 +102,7 @@ public class KafkaController {
 
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
         //consumer.assign(consumer.partitionsFor("topic.messages.*." + sender.hashCode()).stream().map(partitionInfo -> new TopicPartition(partitionInfo.topic(), partitionInfo.partition())).collect(Collectors.toSet()));
-        consumer.subscribe(pattern, new ConsumerRebalanceListener() {
+        consumer.subscribe(Collections.singletonList("topic.messages." +   sender.hashCode()  +"." +   sender.hashCode()), new ConsumerRebalanceListener() {
 
             public void onPartitionsRevoked(Collection<TopicPartition> partitions) {
                 System.out.println("hellooddo33333");
@@ -134,7 +134,8 @@ public class KafkaController {
 
 //
 //        System.out.println("seek to beginning");
-        consumer.seekToBeginning(consumer.assignment());
+        consumer.seekToBeginning(Collections.emptySet());
+        //consumer.seekToBeginning(consumer.assignment());
         System.out.println("polling");
         ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
 

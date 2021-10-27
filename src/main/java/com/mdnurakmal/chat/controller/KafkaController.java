@@ -97,20 +97,21 @@ public class KafkaController {
         consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         consumerConfig.put(ConsumerConfig.METADATA_MAX_AGE_CONFIG	,5000);
-        var pattern = Pattern.compile("topic.messages." +   sender.hashCode()  +"." +   sender.hashCode());
+
         System.out.println("subscribing");
 
+        var pattern = Pattern.compile("topic.messages.user.*."+sender.hashCode());
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
         consumer.subscribe(pattern);
         consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
         consumer.seekToBeginning(consumer.assignment());
+
+        consumer.listTopics();
         ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
 
         records.forEach(record -> {
             JSONObject jsonObject= new JSONObject(record.value() );
-
-            //messagingTemplate.convertAndSend( "/topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"),jsonObject.toString());
-            System.out.println("partition: " + record.partition() +
+           System.out.println("partition: " + record.partition() +
                     ", topic: " + record.topic() +
                     ", offset: " + record.offset() +
                     ", key: " + record.key() +

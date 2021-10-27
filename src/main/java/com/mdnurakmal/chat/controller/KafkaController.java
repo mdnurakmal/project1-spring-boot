@@ -97,7 +97,7 @@ public class KafkaController {
         consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         consumerConfig.put(ConsumerConfig.METADATA_MAX_AGE_CONFIG	,5000);
-        var pattern = Pattern.compile("topic.messages.*." + sender.hashCode());
+        var pattern = Pattern.compile("topic.messages.*." + sender.hashCode()+"-0");
         System.out.println("subscribing");
 
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);

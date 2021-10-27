@@ -125,7 +125,7 @@ public class KafkaController {
 
         System.out.println("rebalance");
         //consumer.poll(Duration.ofMillis(100L));
-        consumer.enforceRebalance();
+        //consumer.enforceRebalance();
 
 //        System.out.println("getting assignment");
 //        Set<TopicPartition> partitions = consumer.assignment();
@@ -134,7 +134,7 @@ public class KafkaController {
 
 //
 //        System.out.println("seek to beginning");
-//        consumer.seekToBeginning(consumer.assignment());
+        consumer.seekToBeginning(consumer.assignment());
         System.out.println("polling");
         ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
 

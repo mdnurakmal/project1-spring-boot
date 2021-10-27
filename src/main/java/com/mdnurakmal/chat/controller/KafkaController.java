@@ -102,6 +102,23 @@ public class KafkaController {
 //
         var pattern = Pattern.compile("topic.messages.*."+sender.hashCode());
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
+        consumer.subscribe(pattern);
+        consumer.poll(Duration.ofMillis(100L));
+        consumer.seekToBeginning(consumer.assignment());
+        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1_000));
+
+        records.forEach(record -> {
+            JSONObject jsonObject= new JSONObject(record.value() );
+            System.out.println("sending !! /topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"));
+
+            messagingTemplate.convertAndSend( "/topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"),jsonObject.toString());
+            System.out.println("partition: " + record.partition() +
+                    ", topic: " + record.topic() +
+                    ", offset: " + record.offset() +
+                    ", key: " + record.key() +
+                    ", value: " + record.value());
+        });
+
         //consumer.subscribe(pattern);
 //        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
 //        System.out.println("******************************************");
@@ -113,8 +130,6 @@ public class KafkaController {
 //                    ", key: " + record.key() +
 //                    ", value: " + record.value());
 //        });
-//
-//        consumer.seekToBeginning(consumer.assignment());
 
         Map<String, List<PartitionInfo>> topics = consumer.listTopics();
 
@@ -122,7 +137,7 @@ public class KafkaController {
         for (Map.Entry<String, List<PartitionInfo>> topic : topics.entrySet()) {
             System.out.println("Topic: "+ topic.getKey());
             String[] words = topic.getKey().split(".");
-            if( words.length == 3)
+            if( words.length == 4)
             {
                 System.out.println("comparing" + Integer.parseInt(topic.getKey().split(".")[3] + " with " + sender.hashCode()));
                 if(Integer.parseInt(topic.getKey().split(".")[3]) ==sender.hashCode())

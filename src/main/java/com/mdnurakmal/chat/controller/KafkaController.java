@@ -101,40 +101,7 @@ public class KafkaController {
         System.out.println("subscribing");
 
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
-        //consumer.assign(consumer.partitionsFor("topic.messages.*." + sender.hashCode()).stream().map(partitionInfo -> new TopicPartition(partitionInfo.topic(), partitionInfo.partition())).collect(Collectors.toSet()));
-        consumer.subscribe(Collections.singletonList("topic.messages." +   sender.hashCode()  +"." +   sender.hashCode()), new ConsumerRebalanceListener() {
-
-            public void onPartitionsRevoked(Collection<TopicPartition> partitions) {
-                System.out.println("hellooddo33333");
-            }
-
-            public void onPartitionsLost(Collection<TopicPartition> partitions) {
-                System.out.println("hellooddo1111");
-                // do not need to save the offsets since these partitions are probably owned by other consumers already
-            }
-
-            public void onPartitionsAssigned(Collection<TopicPartition> partitions) {
-                // read the offsets from an external store using some custom code not described here
-                for(TopicPartition partition: partitions)
-                {
-                    System.out.println("hellooo");
-                }
-
-            }
-        });
-
-        System.out.println("rebalance");
-        //consumer.poll(Duration.ofMillis(100L));
-        //consumer.enforceRebalance();
-
-//        System.out.println("getting assignment");
-//        Set<TopicPartition> partitions = consumer.assignment();
-//        partitions.forEach(part->System.out.println(part.partition()));
-
-//        System.out.println("seek to beginning");
-
-        //consumer.seekToBeginning(consumer.assignment());
-        System.out.println("polling");
+        consumer.subscribe(pattern);
         ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
         consumer.seekToBeginning(consumer.assignment());
 

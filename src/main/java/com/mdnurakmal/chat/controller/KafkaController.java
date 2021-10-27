@@ -97,7 +97,7 @@ public class KafkaController {
         consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         consumerConfig.put(ConsumerConfig.METADATA_MAX_AGE_CONFIG	,5000);
-        var pattern = Pattern.compile("topic.messages.*." + sender.hashCode()+"-0");
+        var pattern = Pattern.compile("topic.messages." +   sender.hashCode()  +"." +   sender.hashCode());
         System.out.println("subscribing");
 
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
@@ -126,9 +126,7 @@ public class KafkaController {
         System.out.println("rebalance");
         //consumer.poll(Duration.ofMillis(100L));
        // consumer.enforceRebalance();
-
-//        consumer.subscribe(pattern);
-//
+        
 //        System.out.println("getting assignment");
 //        Set<TopicPartition> partitions = consumer.assignment();
 //        partitions.forEach(part->System.out.println(part.partition()));

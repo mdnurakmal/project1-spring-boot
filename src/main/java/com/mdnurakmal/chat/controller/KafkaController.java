@@ -96,7 +96,7 @@ public class KafkaController {
         Map<String, Object> consumerConfig = new HashMap<>(consumerFactory.getConfigurationProperties());
         consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-
+        consumerConfig.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 1);
         System.out.println("subscribing");
 //
         var pattern = Pattern.compile("topic.messages.*."+sender.hashCode());
@@ -154,6 +154,7 @@ public class KafkaController {
 
                     ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1_000));
 
+
                     records.forEach(record -> {
                         JSONObject jsonObject= new JSONObject(record.value() );
                         System.out.println("sending !!" + jsonObject.getString("receiver"));
@@ -164,6 +165,7 @@ public class KafkaController {
                                 ", offset: " + record.offset() +
                                 ", key: " + record.key() +
                                 ", value: " + record.value());
+
                     });
 
 

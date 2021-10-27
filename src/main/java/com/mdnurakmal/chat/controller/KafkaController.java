@@ -96,7 +96,7 @@ public class KafkaController {
         Map<String, Object> consumerConfig = new HashMap<>(consumerFactory.getConfigurationProperties());
         consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-
+        consumerConfig.put(ConsumerConfig.METADATA_MAX_AGE_CONFIG	,5000);
         var pattern = Pattern.compile("topic.messages.*." + sender.hashCode());
         System.out.println("subscribing");
 
@@ -128,7 +128,7 @@ public class KafkaController {
 //        partitions.forEach(part->System.out.println(part.partition()));
 //
 //
-//        //consumer.assign(partitions);
+            consumer.assign(consumer.assignment());
 //
 //        System.out.println("seek to beginning");
 //        consumer.seekToBeginning(consumer.assignment());

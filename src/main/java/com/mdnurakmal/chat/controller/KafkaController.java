@@ -102,8 +102,9 @@ public class KafkaController {
 
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
         consumer.subscribe(pattern);
-        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
+        consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
         consumer.seekToBeginning(consumer.assignment());
+        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
 
         records.forEach(record -> {
             JSONObject jsonObject= new JSONObject(record.value() );

@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static org.springframework.kafka.support.KafkaHeaders.TOPIC;
 
@@ -100,20 +101,19 @@ public class KafkaController {
         System.out.println("subscribing");
 
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
-
-        consumer.subscribe(pattern, new ConsumerRebalanceListener() {
-
-            @Override
-            public void onPartitionsRevoked(Collection<TopicPartition> partitions) {}
-
-            @Override
-            public void onPartitionsAssigned(Collection<TopicPartition> partitions) {
-                System.out.println("inside on partitionassigned");
-                System.out.println("Assigned " + partitions);
-                consumer.seekToBeginning(partitions);
-            }
-        });
-        consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
+        consumer.assign(consumer.partitionsFor("topic.messages."+sender.hashCode()+"." + sender.hashCode()).stream().map(partitionInfo -> new TopicPartition(partitionInfo.topic(), partitionInfo.partition())).collect(Collectors.toSet()));
+//        consumer.subscribe(pattern, new ConsumerRebalanceListener() {
+//
+//            @Override
+//            public void onPartitionsRevoked(Collection<TopicPartition> partitions) {}
+//
+//            @Override
+//            public void onPartitionsAssigned(Collection<TopicPartition> partitions) {
+//                System.out.println("inside on partitionassigned");
+//                System.out.println("Assigned " + partitions);
+//                consumer.seekToBeginning(partitions);
+//            }
+//        });
 
         consumer.seekToBeginning(consumer.assignment());
 

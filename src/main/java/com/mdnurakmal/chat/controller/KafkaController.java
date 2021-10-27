@@ -135,8 +135,9 @@ public class KafkaController {
 
 
         for (Map.Entry<String, List<PartitionInfo>> topic : topics.entrySet()) {
-            System.out.println("Topic: "+ topic.getKey());
+
             String[] words = topic.getKey().split(".");
+            System.out.println("Topic: "+ topic.getKey() + "// word length" + words.length);
             if( words.length == 4)
             {
                 System.out.println("comparing" + Integer.parseInt(topic.getKey().split(".")[3] + " with " + sender.hashCode()));

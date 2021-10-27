@@ -103,9 +103,19 @@ public class KafkaController {
         var pattern = Pattern.compile("topic.messages.user.*."+sender.hashCode());
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
         consumer.subscribe(pattern);
-        consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
-        consumer.seekToBeginning(consumer.assignment());
+        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
+        System.out.println("******************************************");
+        records.forEach(record -> {
+            JSONObject jsonObject= new JSONObject(record.value() );
+            System.out.println("partition: " + record.partition() +
+                    ", topic: " + record.topic() +
+                    ", offset: " + record.offset() +
+                    ", key: " + record.key() +
+                    ", value: " + record.value());
+        });
 
+        consumer.seekToBeginning(consumer.assignment());
+        System.out.println("******************************************");
         Map<String, List<PartitionInfo>> topics = consumer.listTopics();
 
         System.out.println("******************************************");
@@ -116,18 +126,17 @@ public class KafkaController {
             System.out.println("Topic: "+ topic.getKey());
             System.out.println("Value: " + topic.getValue() + "\n");
         }
-
-        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
+        System.out.println("******************************************");
+        records = consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
 
         records.forEach(record -> {
             JSONObject jsonObject= new JSONObject(record.value() );
-           System.out.println("partition: " + record.partition() +
+            System.out.println("partition: " + record.partition() +
                     ", topic: " + record.topic() +
                     ", offset: " + record.offset() +
                     ", key: " + record.key() +
                     ", value: " + record.value());
         });
-
         System.out.println("ended");
 
 

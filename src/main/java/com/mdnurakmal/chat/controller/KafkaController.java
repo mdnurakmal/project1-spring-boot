@@ -113,7 +113,9 @@ public class KafkaController {
                 consumer.seekToBeginning(partitions);
             }
         });
+        consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
 
+        consumer.seekToBeginning(consumer.assignment());
 
 //        consumer.subscribe(pattern);
 //

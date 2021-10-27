@@ -104,16 +104,22 @@ public class KafkaController {
         //consumer.assign(consumer.partitionsFor("topic.messages.*." + sender.hashCode()).stream().map(partitionInfo -> new TopicPartition(partitionInfo.topic(), partitionInfo.partition())).collect(Collectors.toSet()));
         consumer.subscribe(pattern, new ConsumerRebalanceListener() {
 
-            @Override
             public void onPartitionsRevoked(Collection<TopicPartition> partitions) {
-                System.out.println("onPartitionsRevoked");
+                System.out.println("hellooddo33333");
             }
 
-            @Override
+            public void onPartitionsLost(Collection<TopicPartition> partitions) {
+                System.out.println("hellooddo1111");
+                // do not need to save the offsets since these partitions are probably owned by other consumers already
+            }
+
             public void onPartitionsAssigned(Collection<TopicPartition> partitions) {
-                System.out.println("onPartitionsAssigned");
-                System.out.println("Assigned " + partitions);
-                consumer.seekToBeginning(partitions);
+                // read the offsets from an external store using some custom code not described here
+                for(TopicPartition partition: partitions)
+                {
+                    System.out.println("hellooo");
+                }
+
             }
         });
 
@@ -136,7 +142,6 @@ public class KafkaController {
 
         records.forEach(record -> {
             JSONObject jsonObject= new JSONObject(record.value() );
-            System.out.println("sending !! /topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"));
 
             //messagingTemplate.convertAndSend( "/topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"),jsonObject.toString());
             System.out.println("partition: " + record.partition() +

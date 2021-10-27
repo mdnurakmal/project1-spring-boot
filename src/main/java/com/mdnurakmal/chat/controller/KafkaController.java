@@ -93,15 +93,15 @@ public class KafkaController {
 
     public void getUniqueUser(String sender){
         // configuration
-//        Map<String, Object> consumerConfig = new HashMap<>(consumerFactory.getConfigurationProperties());
-//        consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-//        consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-//        consumerConfig.put(ConsumerConfig.METADATA_MAX_AGE_CONFIG	,5000);
-//        consumerConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-//        System.out.println("subscribing");
+        Map<String, Object> consumerConfig = new HashMap<>(consumerFactory.getConfigurationProperties());
+        consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        consumerConfig.put(ConsumerConfig.METADATA_MAX_AGE_CONFIG	,5000);
+        consumerConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        System.out.println("subscribing");
 //
 //        var pattern = Pattern.compile("topic.messages.*."+sender.hashCode());
-//        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
 //        consumer.subscribe(pattern);
 //        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
 //        System.out.println("******************************************");

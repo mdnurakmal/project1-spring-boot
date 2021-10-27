@@ -101,7 +101,7 @@ public class KafkaController {
         System.out.println("subscribing");
 
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
-        consumer.assign(consumer.partitionsFor("topic.messages."+sender.hashCode()+"." + sender.hashCode()).stream().map(partitionInfo -> new TopicPartition(partitionInfo.topic(), partitionInfo.partition())).collect(Collectors.toSet()));
+        consumer.assign(consumer.partitionsFor("topic.messages.*." + sender.hashCode()).stream().map(partitionInfo -> new TopicPartition(partitionInfo.topic(), partitionInfo.partition())).collect(Collectors.toSet()));
 //        consumer.subscribe(pattern, new ConsumerRebalanceListener() {
 //
 //            @Override

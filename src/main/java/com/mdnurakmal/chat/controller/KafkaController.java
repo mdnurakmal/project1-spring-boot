@@ -158,7 +158,7 @@ public class KafkaController {
                         JSONObject jsonObject= new JSONObject(record.value() );
                         System.out.println("sending !!" + jsonObject.getString("receiver"));
 
-                        messagingTemplate.convertAndSend( "/topic/sidebar/"+sender);
+                        messagingTemplate.convertAndSend( "/topic/getallmessagesforuser/"+sender,jsonObject.toString());
                         System.out.println("partition: " + record.partition() +
                                 ", topic: " + record.topic() +
                                 ", offset: " + record.offset() +

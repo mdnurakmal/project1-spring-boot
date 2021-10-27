@@ -140,8 +140,8 @@ public class KafkaController {
             System.out.println("Topic: "+ topic.getKey() + "// word length" + words.length);
             if( words.length == 4)
             {
-                System.out.println("comparing" + Integer.parseInt(topic.getKey().split(".")[3] + " with " + sender.hashCode()));
-                if(Integer.parseInt(topic.getKey().split(".")[3]) ==sender.hashCode())
+                System.out.println(words[3] + " with " + sender.hashCode());
+                if(Integer.parseInt(words[3]) ==sender.hashCode())
                     System.out.println("matched**********" + topic.getKey());
             }
         }

@@ -118,6 +118,7 @@ public class KafkaController {
         });
 
         System.out.println("rebalance");
+        consumer.poll(Duration.ofMillis(100L));
         consumer.enforceRebalance();
 
 //        consumer.subscribe(pattern);

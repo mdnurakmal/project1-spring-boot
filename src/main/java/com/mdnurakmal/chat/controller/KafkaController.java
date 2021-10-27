@@ -100,9 +100,9 @@ public class KafkaController {
         consumerConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         System.out.println("subscribing");
 //
-//        var pattern = Pattern.compile("topic.messages.*."+sender.hashCode());
+        var pattern = Pattern.compile("topic.messages.*."+sender.hashCode());
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
-//        consumer.subscribe(pattern);
+        consumer.subscribe(pattern);
 //        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
 //        System.out.println("******************************************");
 //        records.forEach(record -> {

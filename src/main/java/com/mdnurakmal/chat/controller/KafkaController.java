@@ -130,14 +130,13 @@ public class KafkaController {
 //        System.out.println("getting assignment");
 //        Set<TopicPartition> partitions = consumer.assignment();
 //        partitions.forEach(part->System.out.println(part.partition()));
-//
 
-//
 //        System.out.println("seek to beginning");
-        consumer.seekToBeginning(Collections.emptySet());
+
         //consumer.seekToBeginning(consumer.assignment());
         System.out.println("polling");
         ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
+        consumer.seekToBeginning(consumer.assignment());
 
         records.forEach(record -> {
             JSONObject jsonObject= new JSONObject(record.value() );

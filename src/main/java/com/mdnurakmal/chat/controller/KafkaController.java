@@ -125,8 +125,8 @@ public class KafkaController {
 
         System.out.println("rebalance");
         //consumer.poll(Duration.ofMillis(100L));
-       // consumer.enforceRebalance();
-        
+        consumer.enforceRebalance();
+
 //        System.out.println("getting assignment");
 //        Set<TopicPartition> partitions = consumer.assignment();
 //        partitions.forEach(part->System.out.println(part.partition()));

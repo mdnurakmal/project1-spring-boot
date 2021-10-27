@@ -124,6 +124,7 @@ public class KafkaController {
             String[] words = topic.getKey().split(".");
             if( words.length == 3)
             {
+                System.out.println("comparing" + Integer.parseInt(topic.getKey().split(".")[3] + " with " + sender.hashCode()));
                 if(Integer.parseInt(topic.getKey().split(".")[3]) ==sender.hashCode())
                     System.out.println("matched**********" + topic.getKey());
             }

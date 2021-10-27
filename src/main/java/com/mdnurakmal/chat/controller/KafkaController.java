@@ -118,8 +118,8 @@ public class KafkaController {
         });
 
         System.out.println("rebalance");
-        consumer.poll(Duration.ofMillis(100L));
-        consumer.enforceRebalance();
+        //consumer.poll(Duration.ofMillis(100L));
+       // consumer.enforceRebalance();
 
 //        consumer.subscribe(pattern);
 //
@@ -127,8 +127,7 @@ public class KafkaController {
 //        Set<TopicPartition> partitions = consumer.assignment();
 //        partitions.forEach(part->System.out.println(part.partition()));
 //
-//
-            consumer.assign(consumer.assignment());
+
 //
 //        System.out.println("seek to beginning");
 //        consumer.seekToBeginning(consumer.assignment());

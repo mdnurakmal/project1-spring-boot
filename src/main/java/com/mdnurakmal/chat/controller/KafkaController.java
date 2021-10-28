@@ -157,14 +157,10 @@ public class KafkaController {
 
                     records.forEach(record -> {
                         JSONObject jsonObject= new JSONObject(record.value() );
-                        System.out.println("sending !!" + jsonObject.getString("receiver"));
+                        System.out.println("sending jsonobject to string:" + jsonObject.toString());
+                        System.out.println("sending raw value:" + record.value());
 
                         messagingTemplate.convertAndSend( "/topic/getallmessagesforuser/"+sender,jsonObject.toString());
-                        System.out.println("partition: " + record.partition() +
-                                ", topic: " + record.topic() +
-                                ", offset: " + record.offset() +
-                                ", key: " + record.key() +
-                                ", value: " + record.value());
 
                     });
 

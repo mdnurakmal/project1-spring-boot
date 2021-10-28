@@ -160,7 +160,7 @@ public class KafkaController {
                         System.out.println("sending jsonobject to string:" + jsonObject.toString());
                         System.out.println("sending raw value:" + record.value());
 
-                        messagingTemplate.convertAndSend( "/topic/getallmessagesforuser/"+sender,record.value());
+                        messagingTemplate.convertAndSend( "/topic/getallmessagesforuser/"+sender+"/result",record.value());
 
                     });
 

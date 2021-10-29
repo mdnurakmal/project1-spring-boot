@@ -16,6 +16,7 @@
 	<properties>
 		<java.version>11</java.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -41,9 +42,12 @@
 			<artifactId>json</artifactId>
 			<version>20210307</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-gcp-starter-firestore</artifactId>
+			<version>1.2.8.RELEASE</version>
+		</dependency>
 	</dependencies>
-
 
 	<build>
 		<plugins>

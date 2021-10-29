@@ -58,8 +58,8 @@ public class KafkaController {
 
     //@MessageMapping("/sendMessage")
     //@MessageMapping("/topic/messages")
-    @MessageMapping("/topic/messages/{sender}/{recipient}")
-    public void broadcastGroupMessage(@DestinationVariable String sender, @DestinationVariable String recipient, @Payload Message message) {
+    @MessageMapping("/topic/sendMessages/{sender}/{recipient}")
+    public void sendMessages(@DestinationVariable String sender, @DestinationVariable String recipient, @Payload Message message) {
         //Sending this message to all the subscribers
         //message.setTimestamp(LocalDateTime.now().toString());
         System.out.println("receive message from " + sender + " , to: " + recipient + " / " + message);
@@ -68,11 +68,29 @@ public class KafkaController {
             //Sending the message to kafka topic queue
             System.out.println("sending to kafka at topic:" + "topic.messages." + sender.hashCode()  +"." + recipient.hashCode() );
 
-            kafkaTemplate.send("topic.messages." +   sender.hashCode()  +"." +   recipient.hashCode()  , message).get();
+            kafkaTemplate.send("topic.sendmessages." +   sender.hashCode()  +"." +   recipient.hashCode()  , message).get();
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
     }
+
+    @MessageMapping("/topic/receiveMessages/{sender}/{recipient}")
+    public void receiveMessages(@DestinationVariable String sender, @DestinationVariable String recipient, @Payload Message message) {
+        //Sending this message to all the subscribers
+        //message.setTimestamp(LocalDateTime.now().toString());
+        System.out.println("receive message from " + sender + " , to: " + recipient + " / " + message);
+
+        try {
+            //Sending the message to kafka topic queue
+            System.out.println("sending to kafka at topic:" + "topic.messages." + sender.hashCode()  +"." + recipient.hashCode() );
+
+            kafkaTemplate.send("topic.sendmessages." +   sender.hashCode()  +"." +   recipient.hashCode()  , message).get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 
     @MessageMapping("/topic/getallmessagesfromuser/{recipient}/{sender}")
     public void getallmessagesfromuser(@DestinationVariable String recipient, @DestinationVariable String sender, @Payload String message) {

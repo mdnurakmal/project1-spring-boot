@@ -9,9 +9,19 @@ steps:
       - '-c'
       - |
         docker login -u=$$DOCKERUSERNAME -p=$$DOCKERPASSWORD
-        docker tag docker.io/library/chat:0.0.1-SNAPSHOT mdnurakmal/springboot-demo-1:latest
+        docker build -t mdnurakmal/springboot-demo-1:latest .
         docker push mdnurakmal/springboot-demo-1:latest
-    secretEnv: [ 'DOCKERUSERNAME', 'DOCKERPASSWORD' ]
+    secretEnv: [ 'DOCKERUSERNAME', 'DOCKERPASSWORD','FIRESTORE_SA' ]
+
+
+#      # deploy container image to GKE
+#  - name: "gcr.io/cloud-builders/gke-deploy"
+#    args:
+#      - '-c'
+#      - |
+#        export GOOGLE_APPLICATION_CREDENTIALS=$$FIRESTORE_SA
+#      - gke-deploy run --filename=deployment.yaml --location=my-kubernetes-cluster --cluster=us-central1-c
+#    secretEnv: [ 'FIRESTORE_SA' ]
 
 availableSecrets:
   secretManager:
@@ -19,6 +29,8 @@ availableSecrets:
       env: 'DOCKERUSERNAME'
     - versionName: projects/test-327905/secrets/DOCKERPASSWORD/versions/1
       env: 'DOCKERPASSWORD'
+    - versionName: projects/test-327905/secrets/FIRESTORE_SA/versions/1
+      env: 'FIRESTORE_SA'
 
 
 options:

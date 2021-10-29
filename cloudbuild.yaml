@@ -16,6 +16,7 @@ steps:
 
       # deploy container image to GKE
   - name: "gcr.io/cloud-builders/gke-deploy"
+    entrypoint: 'bash'
     args:
       - '-c'
       - |

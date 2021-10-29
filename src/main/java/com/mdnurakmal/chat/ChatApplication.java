@@ -18,8 +18,7 @@ public class ChatApplication {
 
 	public static void main(String[] args) {
 
-		//SpringApplication.run(ChatApplication.class, args);
-		SpringApplication.run(FireStoreConfig.class, args);
+		SpringApplication.run(ChatApplication.class, args);
 
 	}
 

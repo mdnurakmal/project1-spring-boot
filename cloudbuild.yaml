@@ -20,9 +20,9 @@ steps:
     args:
       - '-c'
       - |
-      - gcloud container clusters get-credentials my-kubernetes-cluster
-      - source init.sh
-      -
+        gcloud container clusters get-credentials my-kubernetes-cluster
+        source init.sh
+
 availableSecrets:
   secretManager:
     - versionName: projects/test-327905/secrets/DOCKERUSERNAME/versions/1

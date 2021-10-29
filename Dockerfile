@@ -4,6 +4,7 @@ ARG FIRESTORE_SA
 
 RUN echo $FIRESTORE_SA
 
+RUN mkdir -p /usr/local/firestore
 RUN chown newuser /usr/local/firestore
 USER newuser
 WORKDIR /usr/local/firestore

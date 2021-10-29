@@ -4,9 +4,9 @@ ARG FIRESTORE_SA
 
 RUN echo $FIRESTORE_SA
 
-RUN mkdir -p /usr/local/firestore
-RUN chown newuser /usr/local/firestore
+RUN mkdir -p /firestore
+RUN chown newuser /firestore
 USER newuser
-WORKDIR /usr/local/firestore
-RUN cat $FIRESTORE_SA >> /usr/local/firestore/key.json
-ENV GOOGLE_APPLICATION_CREDENTIALS /usr/local/firestore/key.json
+WORKDIR /firestore
+RUN cat $FIRESTORE_SA >> key.json
+ENV GOOGLE_APPLICATION_CREDENTIALS /firestore/key.json

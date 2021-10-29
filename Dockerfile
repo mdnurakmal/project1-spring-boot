@@ -10,5 +10,6 @@ RUN mkdir -p /firestore
 
 #USER newuser
 WORKDIR /firestore
-RUN $FIRESTORE_SA > key.json
+RUN printf '%s\n' "$KEY" >key.json
+
 ENV GOOGLE_APPLICATION_CREDENTIALS /firestore/key.json

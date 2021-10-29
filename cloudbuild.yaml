@@ -15,13 +15,14 @@ steps:
 
 
       # deploy container image to GKE
-  - name: "gcr.io/cloud-builders/gke-deploy"
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-      - gke-deploy run --filename=deployment.yaml --location=my-kubernetes-cluster --cluster=us-central1-c
-
+      - gcloud container clusters get-credentials my-kubernetes-cluster
+      - source init.sh
+      -
 availableSecrets:
   secretManager:
     - versionName: projects/test-327905/secrets/DOCKERUSERNAME/versions/1

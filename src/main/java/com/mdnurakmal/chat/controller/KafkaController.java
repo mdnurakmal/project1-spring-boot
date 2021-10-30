@@ -45,6 +45,7 @@ public class KafkaController {
     @Autowired
     ChatRoomService chatRoomService;
 
+    private String recipient;
 
     @Autowired
     SimpMessagingTemplate messagingTemplate;
@@ -64,11 +65,9 @@ public class KafkaController {
 
     //@MessageMapping("/sendMessage")
     //@MessageMapping("/topic/messages")
-    @MessageMapping("/topic/messages/{sender}/{recipient}")
-    public void sendMessages(@DestinationVariable String sender, @DestinationVariable String recipient, @Payload Message message) {
-        //Sending this message to all the subscribers
-        //message.setTimestamp(LocalDateTime.now().toString());
-        System.out.println("receive message from " + sender + " , to: " + recipient + " / " + message);
+    @MessageMapping("/topic/messages/{sender}")
+    public void sendMessage(@DestinationVariable String sender, @Payload Message message) {
+        System.out.println("Receive Message from: " + sender + " , To: " + recipient + " / " + message);
 
         try {
             //Sending the message to kafka topic queue
@@ -81,11 +80,12 @@ public class KafkaController {
     }
 
 
-    @MessageMapping("/topic/getallmessagesfromuser/{recipient}/{sender}")
-    public void getallmessagesfromuser(@DestinationVariable String recipient, @DestinationVariable String sender, @Payload String message) {
-        System.out.println("get all messages  from " + recipient + " , to: " + sender + " / " + message);
+    @MessageMapping("/topic/loadMessages/{sender}/{recipient}")
+    public void loadMessages(@DestinationVariable String recipient, @DestinationVariable String sender, @Payload String message) {
+        System.out.println("Change recipient to: " + recipient );
 
         try{
+            recipient=sender;
             String topic = chatRoomService.sendMessage(sender,recipient);
             seekToStart("topic.messages." +   topic.hashCode() );
         } catch (InterruptedException | ExecutionException e) {
@@ -94,8 +94,8 @@ public class KafkaController {
 
     }
 
-    @MessageMapping("/topic/getallmessagesforuser/{sender}")
-    public void getallmessagesforuser(@DestinationVariable String sender, @Payload String message) {
+    @MessageMapping("/topic/loadSidebar/{sender}")
+    public void loadSidebar(@DestinationVariable String sender, @Payload String message) {
         List<ChatRoom> topics = chatRoomService.getAllRecipients("mdnurakmal@gmail.com");
         for (ChatRoom chatRoom : topics) {
             System.out.println(chatRoom.toString());
@@ -105,13 +105,9 @@ public class KafkaController {
         //"topic.messages.*." + sender.hashCode()
     }
 
-    @MessageMapping("/topic/getallmessagessend/{sender}")
-    public void getallmessagessend(@DestinationVariable String sender, @Payload String message) {
-        seekToStart("topic.messages."+sender.hashCode()+".*");
-    }
-
     public void getLastMessage(String topic,String sender){
         // configuration
+
         Map<String, Object> consumerConfig = new HashMap<>(consumerFactory.getConfigurationProperties());
         consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);

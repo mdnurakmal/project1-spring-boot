@@ -1,35 +1,46 @@
 package com.mdnurakmal.chat.model;
 
 public class ChatRoom {
-    private String name;
+
+    private String user;
+    private String recipient;
     private String topic;
 
     public ChatRoom() {
     }
 
-    public ChatRoom(String name, String topic) {
-        this.name = name;
-        this.topic = topic;
+    public ChatRoom( String user, String recipient) {
+
+        this.user = user;
+        this.recipient = recipient;
+        this.topic = user+"."+recipient;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public String getUser() {
+        return this.user;
     }
 
     public String getTopic() {
         return this.topic;
     }
 
-    public void setTopic(String topic) {
-        this.topic = topic;
+    public void setUser(String user) {
+        this.user = user;
     }
+
+
+    public String getRecipient() {
+        return this.recipient;
+    }
+
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
+    }
+
+
 
     @Override
     public String toString() {
-        return "User{" + "name='" + this.name + '\'' + ", topic=" + this.topic + '}';
+        return "User{" +  ", topic=" + this.topic + '}';
     }
 }

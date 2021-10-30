@@ -38,7 +38,7 @@ public class MessageListener {
             String topic = chatRoomService.sendMessage(jsonObject.getString("sender"),jsonObject.getString("receiver"));
             System.out.println("sending via kafka listener..TO :" + "/topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"));
             System.out.println("Message received: " + jsonObject.toString());
-            System.out.println("Json converted: " + jsonObject.getString("sender"));
+            System.out.println("Hashcode: " + topic.hashCode());
             messagingTemplate.convertAndSend( "/topic/messages/"+topic.hashCode(),jsonObject.toString());
 
 

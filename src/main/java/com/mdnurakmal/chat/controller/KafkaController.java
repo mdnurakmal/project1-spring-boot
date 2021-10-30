@@ -99,7 +99,7 @@ public class KafkaController {
         List<ChatRoom> topics = chatRoomService.getAllRecipients("mdnurakmal@gmail.com");
         for (ChatRoom chatRoom : topics) {
             System.out.println(chatRoom.toString());
-            getLastMessage(chatRoom.toString(),sender);
+            getLastMessage(chatRoom.getTopic(),sender);
         }
 
         //"topic.messages.*." + sender.hashCode()
@@ -121,9 +121,8 @@ public class KafkaController {
 
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
 
-
         List<TopicPartition> topicPartitions = new ArrayList<>();
-        for (PartitionInfo partitionInfo : consumer.partitionsFor(topic)) {
+        for (PartitionInfo partitionInfo : consumer.partitionsFor("topic.messages." +   topic.hashCode())) {
             topicPartitions.add(new TopicPartition(partitionInfo.topic(), partitionInfo.partition()));
         }
 

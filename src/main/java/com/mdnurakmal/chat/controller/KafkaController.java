@@ -45,8 +45,8 @@ public class KafkaController {
     @Autowired
     ChatRoomService chatRoomService;
 
-    private String recipient;
-
+//    private String recipient;
+//    private String sender;
     @Autowired
     SimpMessagingTemplate messagingTemplate;
 
@@ -65,8 +65,8 @@ public class KafkaController {
 
     //@MessageMapping("/sendMessage")
     //@MessageMapping("/topic/messages")
-    @MessageMapping("/topic/messages/{sender}")
-    public void sendMessage(@DestinationVariable String sender, @Payload Message message) {
+    @MessageMapping("/topic/messages/{sender}/{recipient")
+    public void sendMessage(@DestinationVariable String sender,@DestinationVariable String recipient, @Payload Message message) {
         System.out.println("Receive Message from: " + sender + " , To: " + recipient + " / " + message);
 
         try {
@@ -87,7 +87,7 @@ public class KafkaController {
         try{
             recipient=sender;
             String topic = chatRoomService.sendMessage(sender,recipient);
-            seekToStart("topic.messages." +   topic.hashCode() );
+            seekToStart( sender, recipient,"topic.messages." +   topic.hashCode() );
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
@@ -222,7 +222,7 @@ public class KafkaController {
 
     }
 
-    public void seekToStart(String topic ) {
+    public void seekToStart(String sender,String recipient,String topic ) {
         // configuration
         Map<String, Object> consumerConfig = new HashMap<>(consumerFactory.getConfigurationProperties());
         consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
@@ -245,7 +245,7 @@ public class KafkaController {
             JSONObject jsonObject= new JSONObject(record.value() );
             System.out.println("sending !! /topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"));
 
-            messagingTemplate.convertAndSend( "/topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"),jsonObject.toString());
+            messagingTemplate.convertAndSend( "/topic/messages/"+sender+"/"+recipient,jsonObject.toString());
             System.out.println("partition: " + record.partition() +
                     ", topic: " + record.topic() +
                     ", offset: " + record.offset() +

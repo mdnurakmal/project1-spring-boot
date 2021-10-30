@@ -96,7 +96,7 @@ public class KafkaController {
 
     @MessageMapping("/topic/loadSidebar/{sender}")
     public void loadSidebar(@DestinationVariable String sender, @Payload String message) {
-        List<ChatRoom> topics = chatRoomService.getAllRecipients("mdnurakmal@gmail.com");
+        List<ChatRoom> topics = chatRoomService.getAllRecipients(sender);
         for (ChatRoom chatRoom : topics) {
             System.out.println(chatRoom.toString());
             getLastMessage(chatRoom.getTopic(),sender);

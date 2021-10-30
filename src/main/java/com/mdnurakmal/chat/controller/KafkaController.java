@@ -84,7 +84,6 @@ public class KafkaController {
         System.out.println("Change recipient to: " + recipient );
 
         try{
-            recipient=sender;
             String topic = chatRoomService.sendMessage(sender,recipient);
             seekToStart( sender, recipient,"topic.messages." +   topic.hashCode() );
             messagingTemplate.convertAndSend( "/topic/loadMessages/"+sender+"/"+recipient+"/result",topic.hashCode());

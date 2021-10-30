@@ -65,15 +65,14 @@ public class KafkaController {
 
     //@MessageMapping("/sendMessage")
     //@MessageMapping("/topic/messages")
-    @MessageMapping("/topic/messages/{sender}/{recipient")
-    public void sendMessage(@DestinationVariable String sender,@DestinationVariable String recipient, @Payload Message message) {
-        System.out.println("Receive Message from: " + sender + " , To: " + recipient + " / " + message);
+    @MessageMapping("/topic/messages/{hashcode}")
+    public void sendMessage(@DestinationVariable String hashcode, @Payload Message message) {
+        System.out.println("Receive Message from: " + hashcode);
 
         try {
             //Sending the message to kafka topic queue
-            System.out.println("sending to kafka at topic:" + "topic.messages." + sender.hashCode()  +"." + recipient.hashCode() );
-            String topic = chatRoomService.sendMessage(sender,recipient);
-            kafkaTemplate.send("topic.messages." +   topic.hashCode()  , message).get();
+            //System.out.println("sending to kafka at topic:" + "topic.messages." + sender.hashCode()  +"." + recipient.hashCode() );
+            kafkaTemplate.send("topic.messages." +   hashcode  , message).get();
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }

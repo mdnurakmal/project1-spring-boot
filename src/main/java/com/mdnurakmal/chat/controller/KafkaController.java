@@ -85,8 +85,9 @@ public class KafkaController {
 
         try{
             String topic = chatRoomService.sendMessage(sender,recipient);
-            seekToStart( sender, recipient,String.valueOf(topic.hashCode() ));
             messagingTemplate.convertAndSend( "/topic/loadMessages/"+sender+"/"+recipient+"/result",topic.hashCode());
+
+            seekToStart( sender, recipient,String.valueOf(topic.hashCode() ));
 
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);

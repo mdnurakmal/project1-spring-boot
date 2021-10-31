@@ -264,7 +264,7 @@ public class KafkaController {
             JSONObject jsonObject= new JSONObject(record.value() );
             System.out.println("sending !! /topic/messages/"+hashcode);
 
-            messagingTemplate.convertAndSend( "/topic/messages/"+hashcode,jsonObject.toString());
+            messagingTemplate.convertAndSend( "/topic/loadMessages/history/"+hashcode,jsonObject.toString());
             System.out.println("partition: " + record.partition() +
                     ", topic: " + record.topic() +
                     ", offset: " + record.offset() +
@@ -272,7 +272,7 @@ public class KafkaController {
                     ", value: " + record.value());
         });
 
-
+        messagingTemplate.convertAndSend( "/topic/loadMessages/history/"+hashcode,"completed");
     }
 
 

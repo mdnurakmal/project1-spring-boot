@@ -81,7 +81,7 @@ public class KafkaController {
 
     @MessageMapping("/topic/loadMessages/{sender}/{recipient}")
     public void loadMessages(@DestinationVariable String recipient, @DestinationVariable String sender, @Payload String message) {
-        System.out.println("Change recipient to: " + recipient );
+        System.out.println("Change recipient to: " + recipient + "//" + message);
 
         if(message=="getAllMessagesTopic")
         {

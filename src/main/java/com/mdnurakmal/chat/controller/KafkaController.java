@@ -83,14 +83,24 @@ public class KafkaController {
     public void loadMessages(@DestinationVariable String recipient, @DestinationVariable String sender, @Payload String message) {
         System.out.println("Change recipient to: " + recipient );
 
-        try{
-            String topic = chatRoomService.sendMessage(sender,recipient);
-            messagingTemplate.convertAndSend( "/topic/loadMessages/"+sender+"/"+recipient+"/result",topic.hashCode());
+        if(message=="getAllMessagesTopic")
+        {
+            try{
+                String topic = chatRoomService.sendMessage(sender,recipient);
+                messagingTemplate.convertAndSend( "/topic/loadMessages/"+sender+"/"+recipient+"/result",topic.hashCode());
 
-            seekToStart( sender, recipient,String.valueOf(topic.hashCode() ));
-
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
+            } catch (InterruptedException | ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        else if(message=="subscribedToTopic")
+        {
+            try{
+                String topic = chatRoomService.sendMessage(sender,recipient);
+                seekToStart( sender, recipient,String.valueOf(topic.hashCode() ));
+            } catch (InterruptedException | ExecutionException e) {
+                throw new RuntimeException(e);
+            }
         }
 
     }

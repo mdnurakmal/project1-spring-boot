@@ -85,7 +85,7 @@ public class KafkaController {
 
         try{
             String topic = chatRoomService.sendMessage(sender,recipient);
-            seekToStart( sender, recipient,"topic.messages." +   topic.hashCode() );
+            seekToStart( sender, recipient,String.valueOf(topic.hashCode() ));
             messagingTemplate.convertAndSend( "/topic/loadMessages/"+sender+"/"+recipient+"/result",topic.hashCode());
 
         } catch (InterruptedException | ExecutionException e) {
@@ -222,7 +222,7 @@ public class KafkaController {
 
     }
 
-    public void seekToStart(String sender,String recipient,String topic ) {
+    public void seekToStart(String sender,String recipient,String hashcode ) {
         // configuration
         Map<String, Object> consumerConfig = new HashMap<>(consumerFactory.getConfigurationProperties());
         consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
@@ -231,7 +231,7 @@ public class KafkaController {
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
 
         List<TopicPartition> topicPartitions = new ArrayList<>();
-        for (PartitionInfo partitionInfo : consumer.partitionsFor(topic)) {
+        for (PartitionInfo partitionInfo : consumer.partitionsFor("topic.messages."+hashcode)) {
             topicPartitions.add(new TopicPartition(partitionInfo.topic(), partitionInfo.partition()));
         }
 
@@ -245,7 +245,7 @@ public class KafkaController {
             JSONObject jsonObject= new JSONObject(record.value() );
             System.out.println("sending !! /topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"));
 
-            messagingTemplate.convertAndSend( "/topic/messages/"+sender+"/"+recipient,jsonObject.toString());
+            messagingTemplate.convertAndSend( "/topic/messages/"+hashcode,jsonObject.toString());
             System.out.println("partition: " + record.partition() +
                     ", topic: " + record.topic() +
                     ", offset: " + record.offset() +

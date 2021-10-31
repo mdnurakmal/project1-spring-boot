@@ -243,7 +243,7 @@ public class KafkaController {
 
         records.forEach(record -> {
             JSONObject jsonObject= new JSONObject(record.value() );
-            System.out.println("sending !! /topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"));
+            System.out.println("sending !! /topic/messages/"+hashcode);
 
             messagingTemplate.convertAndSend( "/topic/messages/"+hashcode,jsonObject.toString());
             System.out.println("partition: " + record.partition() +

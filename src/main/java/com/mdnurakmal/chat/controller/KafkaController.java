@@ -85,6 +85,8 @@ public class KafkaController {
 
         if(message=="getAllMessagesTopic")
         {
+            System.out.println("Message getAllMessagesTopic");
+
             try{
                 String topic = chatRoomService.sendMessage(sender,recipient);
                 messagingTemplate.convertAndSend( "/topic/loadMessages/"+sender+"/"+recipient+"/result",topic.hashCode());
@@ -95,6 +97,7 @@ public class KafkaController {
         }
         else if(message=="subscribedToTopic")
         {
+            System.out.println("Message subscribedToTopic");
             try{
                 String topic = chatRoomService.sendMessage(sender,recipient);
                 seekToStart( sender, recipient,String.valueOf(topic.hashCode() ));

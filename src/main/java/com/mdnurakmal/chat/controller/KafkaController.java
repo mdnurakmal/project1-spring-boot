@@ -83,7 +83,7 @@ public class KafkaController {
     public void loadMessages(@DestinationVariable String recipient, @DestinationVariable String sender, @Payload String message) {
         System.out.println("Change recipient to: " + recipient + "//" + message);
 
-        if(message=="getAllMessagesTopic")
+        if(message.equals("getAllMessagesTopic"))
         {
             System.out.println("Message getAllMessagesTopic");
 
@@ -95,7 +95,7 @@ public class KafkaController {
                 throw new RuntimeException(e);
             }
         }
-        else if(message=="subscribedToTopic")
+        else if(message.equals("subscribedToTopic"))
         {
             System.out.println("Message subscribedToTopic");
             try{

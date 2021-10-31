@@ -45,9 +45,7 @@ public class MessageListener {
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
-
-
-
    }
+
 }
 

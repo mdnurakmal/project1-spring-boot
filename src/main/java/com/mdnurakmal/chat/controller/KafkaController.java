@@ -63,19 +63,24 @@ public class KafkaController {
         }
     }
 
-    //@MessageMapping("/sendMessage")
-    //@MessageMapping("/topic/messages")
-    @MessageMapping("/topic/messages/{hashcode}")
-    public void sendMessage(@DestinationVariable String hashcode, @Payload Message message) {
+    public void sendToKafka(String hashcode, @Payload Message message) {
         System.out.println("Receive Message from: " + hashcode);
 
         try {
-            //Sending the message to kafka topic queue
-            //System.out.println("sending to kafka at topic:" + "topic.messages." + sender.hashCode()  +"." + recipient.hashCode() );
+          //System.out.println("sending to kafka at topic:" + "topic.messages." + sender.hashCode()  +"." + recipient.hashCode() );
             kafkaTemplate.send("topic.messages." +   hashcode  , message).get();
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @MessageMapping("/topic/messages/{hashcode}/process")
+    public void processMessage(@DestinationVariable String hashcode, @Payload Message message) {
+        System.out.println("Receive Message from: " + hashcode);
+
+            //Sending the message to kafka topic queue
+            //System.out.println("sending to kafka at topic:" + "topic.messages." + sender.hashCode()  +"." + recipient.hashCode() );
+            sendToKafka(hashcode,message);
     }
 
 

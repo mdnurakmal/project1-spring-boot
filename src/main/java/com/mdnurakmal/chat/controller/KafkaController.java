@@ -124,13 +124,6 @@ public class KafkaController {
         //"topic.messages.*." + sender.hashCode()
     }
 
-    @MessageMapping("/topic/updateSidebar/{topic}/{sender}")
-    public void updateSidebar(@DestinationVariable String topic,@DestinationVariable String sender, @Payload String message) {
-
-        messagingTemplate.convertAndSend( "/topic/loadSidebar/"+sender+"/result",message);
-    }
-
-
 
     public void getLastMessage(String topic,String sender){
         // configuration

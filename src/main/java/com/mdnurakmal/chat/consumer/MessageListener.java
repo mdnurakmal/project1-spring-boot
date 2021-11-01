@@ -10,6 +10,7 @@ import com.mdnurakmal.chat.service.ChatRoomService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -40,9 +41,8 @@ public class MessageListener {
             System.out.println("Message received: " + jsonObject.toString());
             System.out.println("Hashcode: " + topic.hashCode());
             messagingTemplate.convertAndSend( "/topic/messages/"+topic.hashCode(),jsonObject.toString());
-            messagingTemplate.convertAndSend( "/topic/updateSidebar/"+topic.hashCode()+"/"+jsonObject.getString("receiver"),jsonObject.toString());
-            messagingTemplate.convertAndSend( "/topic/updateSidebar/"+topic.hashCode()+"/"+jsonObject.getString("sender"),jsonObject.toString());
-
+            messagingTemplate.convertAndSend( "/topic/loadSidebar/"+jsonObject.getString("receiver"),jsonObject.toString());
+            messagingTemplate.convertAndSend( "/topic/loadSidebar/"+jsonObject.getString("sender"),jsonObject.toString());
 
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);

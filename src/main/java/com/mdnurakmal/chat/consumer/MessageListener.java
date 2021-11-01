@@ -40,6 +40,8 @@ public class MessageListener {
             System.out.println("Message received: " + jsonObject.toString());
             System.out.println("Hashcode: " + topic.hashCode());
             messagingTemplate.convertAndSend( "/topic/messages/"+topic.hashCode(),jsonObject.toString());
+            messagingTemplate.convertAndSend( "/topic/updateSidebar/"+topic.hashCode()+"/"+jsonObject.getString("receiver"),jsonObject.toString());
+            messagingTemplate.convertAndSend( "/topic/updateSidebar/"+topic.hashCode()+"/"+jsonObject.getString("sender"),jsonObject.toString());
 
 
         } catch (InterruptedException | ExecutionException e) {

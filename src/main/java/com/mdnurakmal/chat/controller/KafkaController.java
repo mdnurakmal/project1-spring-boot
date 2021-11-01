@@ -144,9 +144,21 @@ public class KafkaController {
 
         // seek from first
         consumer.assign(topicPartitions);
-        consumer.seekToEnd(consumer.assignment());
+        //consumer.seekToEnd(consumer.assignment());
+
+   
+        Set<TopicPartition> assignedPartitions = consumer.assignment();
+        // Seek to the end of those partitions
+        consumer.seekToEnd(assignedPartitions);
+
+        for(TopicPartition partition : assignedPartitions) {
+            final long offset = consumer.committed(partition).offset();
+            // Seek to the previous message
+            consumer.seek(partition,offset - 1);
+        }
 
         ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1_000));
+
 
         records.forEach(record -> {
             JSONObject jsonObject= new JSONObject(record.value() );
@@ -155,6 +167,8 @@ public class KafkaController {
 
             messagingTemplate.convertAndSend( "/topic/loadSidebar/"+sender+"/result",record.value());
         });
+
+        consumer.close();
     }
 
 

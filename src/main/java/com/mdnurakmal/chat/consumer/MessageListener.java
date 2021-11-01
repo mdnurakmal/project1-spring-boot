@@ -41,35 +41,9 @@ public class MessageListener {
             System.out.println("sending via kafka listener..TO :" + "/topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"));
             System.out.println("Message received: " + jsonObject.toString());
             System.out.println("Hashcode: " + topic.hashCode());
-            try{
-                System.out.println("Stage 1 >>>>");
-                messagingTemplate.convertAndSend( "/topic/messages/"+topic.hashCode(),jsonObject.toString());
-            }
-            catch (MessagingException e)
-            {
-
-            }
-
-        try{
-            System.out.println("Stage 2 >>>>");
+            messagingTemplate.convertAndSend( "/topic/messages/"+topic.hashCode(),jsonObject.toString());
             messagingTemplate.convertAndSend( "/topic/loadSidebar/"+jsonObject.getString("receiver")+"/result",jsonObject.toString());
-
-        }
-        catch (MessagingException e)
-        {
-
-        }
-
-        try{
-            System.out.println("Stage 3 >>>>");
             messagingTemplate.convertAndSend( "/topic/loadSidebar/"+jsonObject.getString("sender")+"/result",jsonObject.toString());
-
-        }
-        catch (MessagingException e)
-        {
-
-        }
-
 
 
    }

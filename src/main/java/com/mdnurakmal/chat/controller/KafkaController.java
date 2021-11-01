@@ -146,7 +146,7 @@ public class KafkaController {
         consumer.assign(topicPartitions);
         //consumer.seekToEnd(consumer.assignment());
 
-   
+
         Set<TopicPartition> assignedPartitions = consumer.assignment();
         // Seek to the end of those partitions
         consumer.seekToEnd(assignedPartitions);
@@ -172,89 +172,89 @@ public class KafkaController {
     }
 
 
-
-
-    public void getUniqueUser(String sender){
-        // configuration
-        Map<String, Object> consumerConfig = new HashMap<>(consumerFactory.getConfigurationProperties());
-        consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        consumerConfig.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 1);
-        System.out.println("subscribing");
 //
-        var pattern = Pattern.compile("topic.messages.*."+sender.hashCode());
-        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
-//        consumer.subscribe(pattern);
-//        consumer.poll(Duration.ofMillis(100L));
-//        consumer.seekToBeginning(consumer.assignment());
-//        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1_000));
-
-//        records.forEach(record -> {
-//            JSONObject jsonObject= new JSONObject(record.value() );
-//            System.out.println("sending !! /topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"));
 //
-//            messagingTemplate.convertAndSend( "/topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"),jsonObject.toString());
-//            System.out.println("partition: " + record.partition() +
-//                    ", topic: " + record.topic() +
-//                    ", offset: " + record.offset() +
-//                    ", key: " + record.key() +
-//                    ", value: " + record.value());
-//        });
-
-        //consumer.subscribe(pattern);
-//        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
-//        System.out.println("******************************************");
-//        records.forEach(record -> {
-//            JSONObject jsonObject= new JSONObject(record.value() );
-//            System.out.println("partition: " + record.partition() +
-//                    ", topic: " + record.topic() +
-//                    ", offset: " + record.offset() +
-//                    ", key: " + record.key() +
-//                    ", value: " + record.value());
-//        });
-
-        Map<String, List<PartitionInfo>> topics = consumer.listTopics();
-
-        List<String> topicsMatched = new ArrayList();
-
-        for (Map.Entry<String, List<PartitionInfo>> topic : topics.entrySet()) {
-
-            String[] words = topic.getKey().split("\\.");
-            if( words.length == 4)
-            {
-                if(Integer.parseInt(words[3]) ==sender.hashCode())
-                {
-                    topicsMatched.add(topic.getKey());
-
-                    List<TopicPartition> topicPartitions = new ArrayList<>();
-                    for (PartitionInfo partitionInfo : consumer.partitionsFor(topic.getKey())) {
-                        topicPartitions.add(new TopicPartition(partitionInfo.topic(), partitionInfo.partition()));
-                    }
-
-                    // seek from first
-                    consumer.assign(topicPartitions);
-                    consumer.seekToBeginning(consumer.assignment());
-
-                    ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1_000));
-
-
-                    records.forEach(record -> {
-                        JSONObject jsonObject= new JSONObject(record.value() );
-                        System.out.println("sending jsonobject to string:" + jsonObject.toString());
-                        System.out.println("sending raw value:" + record.value());
-
-                        messagingTemplate.convertAndSend( "/topic/loadSidebar/"+sender+"/result",record.value());
-
-                    });
-
-
-                }
-            }
-        }
-
-
-
-    }
+//    public void getUniqueUser(String sender){
+//        // configuration
+//        Map<String, Object> consumerConfig = new HashMap<>(consumerFactory.getConfigurationProperties());
+//        consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+//        consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+//        consumerConfig.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 1);
+//        System.out.println("subscribing");
+////
+//        var pattern = Pattern.compile("topic.messages.*."+sender.hashCode());
+//        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
+////        consumer.subscribe(pattern);
+////        consumer.poll(Duration.ofMillis(100L));
+////        consumer.seekToBeginning(consumer.assignment());
+////        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1_000));
+//
+////        records.forEach(record -> {
+////            JSONObject jsonObject= new JSONObject(record.value() );
+////            System.out.println("sending !! /topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"));
+////
+////            messagingTemplate.convertAndSend( "/topic/messages/"+jsonObject.getString("receiver")+"/"+jsonObject.getString("sender"),jsonObject.toString());
+////            System.out.println("partition: " + record.partition() +
+////                    ", topic: " + record.topic() +
+////                    ", offset: " + record.offset() +
+////                    ", key: " + record.key() +
+////                    ", value: " + record.value());
+////        });
+//
+//        //consumer.subscribe(pattern);
+////        ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100L)); //no loop to simplify
+////        System.out.println("******************************************");
+////        records.forEach(record -> {
+////            JSONObject jsonObject= new JSONObject(record.value() );
+////            System.out.println("partition: " + record.partition() +
+////                    ", topic: " + record.topic() +
+////                    ", offset: " + record.offset() +
+////                    ", key: " + record.key() +
+////                    ", value: " + record.value());
+////        });
+//
+//        Map<String, List<PartitionInfo>> topics = consumer.listTopics();
+//
+//        List<String> topicsMatched = new ArrayList();
+//
+//        for (Map.Entry<String, List<PartitionInfo>> topic : topics.entrySet()) {
+//
+//            String[] words = topic.getKey().split("\\.");
+//            if( words.length == 4)
+//            {
+//                if(Integer.parseInt(words[3]) ==sender.hashCode())
+//                {
+//                    topicsMatched.add(topic.getKey());
+//
+//                    List<TopicPartition> topicPartitions = new ArrayList<>();
+//                    for (PartitionInfo partitionInfo : consumer.partitionsFor(topic.getKey())) {
+//                        topicPartitions.add(new TopicPartition(partitionInfo.topic(), partitionInfo.partition()));
+//                    }
+//
+//                    // seek from first
+//                    consumer.assign(topicPartitions);
+//                    consumer.seekToBeginning(consumer.assignment());
+//
+//                    ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1_000));
+//
+//
+//                    records.forEach(record -> {
+//                        JSONObject jsonObject= new JSONObject(record.value() );
+//                        System.out.println("sending jsonobject to string:" + jsonObject.toString());
+//                        System.out.println("sending raw value:" + record.value());
+//
+//                        messagingTemplate.convertAndSend( "/topic/loadSidebar/"+sender+"/result",record.value());
+//
+//                    });
+//
+//
+//                }
+//            }
+//        }
+//
+//
+//
+//    }
 
     public void seekToStart(String sender,String recipient,String hashcode ) {
         // configuration
@@ -288,6 +288,8 @@ public class KafkaController {
         });
 
         messagingTemplate.convertAndSend( "/topic/loadMessages/history/"+hashcode,"completed");
+
+        consumer.close();
     }
 
 

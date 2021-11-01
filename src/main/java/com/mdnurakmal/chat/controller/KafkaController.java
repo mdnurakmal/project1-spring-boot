@@ -132,7 +132,7 @@ public class KafkaController {
         consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         consumerConfig.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 1);
-        System.out.println("subscribing");
+        System.out.println("Getting last message from: " + topic.hashCode() + ", " + sender);
 //
 
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);

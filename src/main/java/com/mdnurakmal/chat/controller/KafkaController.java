@@ -144,7 +144,7 @@ public class KafkaController {
 
         // seek from first
         consumer.assign(topicPartitions);
-        consumer.seekToBeginning(consumer.assignment());
+        consumer.seekToEnd(consumer.assignment());
 
         ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1_000));
 

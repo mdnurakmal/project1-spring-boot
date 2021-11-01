@@ -117,7 +117,7 @@ public class KafkaController {
     public void loadSidebar(@DestinationVariable String sender, @Payload String message) {
         List<ChatRoom> topics = chatRoomService.getAllRecipients(sender);
         for (ChatRoom chatRoom : topics) {
-            System.out.println(chatRoom.toString());
+            System.out.println(">>>>"+chatRoom.toString());
             getLastMessage(chatRoom.getTopic(),sender);
         }
 

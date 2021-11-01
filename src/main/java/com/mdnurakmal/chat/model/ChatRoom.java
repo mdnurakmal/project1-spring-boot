@@ -41,6 +41,6 @@ public class ChatRoom {
 
     @Override
     public String toString() {
-        return "User{" +  ", topic=" + this.topic + '}';
+        return "Chatroom : " +  ", topic=" + this.topic  +  ", user=" + this.user +   ", recipient=" + this.recipient;
     }
 }
